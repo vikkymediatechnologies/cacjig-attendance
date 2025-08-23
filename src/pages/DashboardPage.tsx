@@ -245,18 +245,66 @@ const DashboardPage = () => {
                 <Download className="h-5 w-5 text-church-primary" />
                 Export Reports
               </CardTitle>
-              <CardDescription>Download attendance data</CardDescription>
+              <CardDescription>Download attendance data in various formats</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start hover:bg-church-primary/5"
+                onClick={() => {
+                  // Mock Excel export
+                  const csvData = "Service,Date,Ministry,Category,Count\nFirst Service,2024-08-18,Main Church,Havilah,120\nSecond Service,2024-08-18,Main Church,Zion,95";
+                  const blob = new Blob([csvData], { type: 'text/csv' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'attendance_export.csv';
+                  a.click();
+                }}
+              >
                 <Download className="h-4 w-4 mr-2" />
-                Export as Excel
+                Export as Excel (.csv)
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start hover:bg-church-secondary/5"
+                onClick={() => {
+                  // Mock PDF export
+                  const jsonData = JSON.stringify(mockData, null, 2);
+                  const blob = new Blob([jsonData], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'attendance_report.json';
+                  a.click();
+                }}
+              >
                 <Download className="h-4 w-4 mr-2" />
-                Export as PDF
+                Export as JSON
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start hover:bg-church-accent/5"
+                onClick={() => {
+                  window.print();
+                }}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Print PDF Report
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full justify-start hover:bg-church-primary/5"
+                onClick={() => {
+                  const summaryData = `CACJIGM Weekly Summary\n\nTotal Attendance: ${mockData.totalAttendance}\nWeekly Growth: ${mockData.weeklyGrowth}%\nServices Held: ${mockData.servicesCount}\n\nMinistry Breakdown:\n${Object.entries(mockData.ministryBreakdown).map(([ministry, count]) => `${ministry}: ${count}`).join('\n')}`;
+                  const blob = new Blob([summaryData], { type: 'text/plain' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'weekly_summary.txt';
+                  a.click();
+                }}
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Weekly Summary Report
               </Button>

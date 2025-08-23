@@ -37,9 +37,9 @@ const Index = () => {
   const navigationCards = [
     {
       title: "Service Attendance",
-      description: "Enter attendance for church services",
+      description: "Secure PIN login and attendance entry",
       icon: Users,
-      href: "/attendance",
+      href: "/login",
       gradient: "from-church-primary to-church-secondary"
     },
     {
@@ -97,9 +97,9 @@ const Index = () => {
           <Button 
             size="lg" 
             className="bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90 text-white px-8 py-3 text-lg"
-            onClick={() => window.location.href = '/attendance'}
+            onClick={() => window.location.href = '/login'}
           >
-            Enter Attendance
+            Enter Attendance System
             <ChevronRight className="ml-2 h-5 w-5" />
           </Button>
         </section>

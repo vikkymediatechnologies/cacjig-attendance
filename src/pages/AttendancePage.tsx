@@ -28,25 +28,30 @@ const AttendancePage = () => {
   const [attendanceData, setAttendanceData] = useState<Record<string, number>>({});
   const { toast } = useToast();
 
-  // Mock PIN verification - in real app, this would connect to backend
+  // PIN verification with specific codes
   const verifyPin = (pin: string) => {
-    const mockUsers = {
-      '1234': { name: 'John Usher', role: 'usher', ministry: 'Main Church' },
-      '5678': { name: 'Mary Teacher', role: 'teacher', ministry: 'Teens Church' },
-      '9999': { name: 'Pastor David', role: 'pastor', ministry: 'All' }
+    const users = {
+      '1234': { name: 'Main Church Usher', role: 'usher', ministry: 'Main Church' },
+      '5678': { name: 'Teens Church Teacher', role: 'teacher', ministry: 'Teens Church' },
+      '9012': { name: 'Children Church Teacher', role: 'teacher', ministry: 'Children Church' },
+      '0000': { name: 'Church Leader', role: 'leader', ministry: 'All' }
     };
-    return mockUsers[pin as keyof typeof mockUsers];
+    return users[pin as keyof typeof users];
   };
 
   const services = [
-    'Marathon Service',
-    'First Service', 
-    'Second Service',
-    'Take Charge of the Week',
-    'Agbara Mountain Program',
-    'Dining with the King',
-    'Holy Ghost Fire Night',
-    'Arogungbogunmi'
+    'Marathon Service (Sunday 6:00 AM)',
+    'First Service (Sunday 8:30 AM)', 
+    'Second Service (Sunday 11:00 AM)',
+    'Teens Church (Sunday 11:00 AM)',
+    'Children Church (Sunday 11:00 AM)',
+    'Take Charge of the Week (Monday 6:00 PM)',
+    'Wednesday Agbara Mountain Program (Wednesday 6:00 PM)',
+    'Dining with the King - Bible Study (Thursday 6:00 PM)',
+    'Holy Ghost Fire Night (3rd Friday 6:00 PM)',
+    'Arogungbogunmi (2nd Saturday 6:00 PM)',
+    'Bible Club Youth (Saturday 4:00 PM)',
+    'Bible Club Children (Saturday 4:00 PM)'
   ];
 
   const ministryAreas = {
@@ -63,6 +68,11 @@ const AttendancePage = () => {
     const user = verifyPin(pin);
     if (user) {
       setUserOnDuty(user.name);
+      // Redirect leaders to dashboard
+      if (user.role === 'leader') {
+        window.location.href = '/dashboard';
+        return;
+      }
       setStep('service');
       toast({
         title: "Authentication Successful",
@@ -173,7 +183,12 @@ const AttendancePage = () => {
                 <Shield className="h-8 w-8 text-white" />
               </div>
               <CardTitle className="text-2xl">PIN Authentication</CardTitle>
-              <CardDescription>Enter your unique PIN to access the attendance system</CardDescription>
+              <CardDescription>
+                Enter your unique PIN:<br />
+                <span className="text-xs text-muted-foreground mt-2 block">
+                  1234 for Main Church • 5678 for Teens Church • 9012 for Children Church • 0000 for Leaders Dashboard
+                </span>
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
