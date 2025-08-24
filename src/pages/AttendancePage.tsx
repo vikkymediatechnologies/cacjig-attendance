@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Shield, Calendar, Users, Hash } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AttendanceData {
   service: string;
@@ -118,7 +119,7 @@ const AttendancePage = () => {
     }));
   };
 
-  const handleSubmitAttendance = () => {
+  const handleSubmitAttendance = async () => {
     const totalCount = Object.values(attendanceData).reduce((sum, count) => sum + count, 0);
     
     if (totalCount === 0) {
@@ -130,25 +131,50 @@ const AttendancePage = () => {
       return;
     }
 
-    // In real app, this would save to backend
-    console.log({
-      service: selectedService,
-      date: selectedDate,
-      ministryArea: selectedMinistry,
-      section: selectedSection,
-      userOnDuty,
-      data: attendanceData,
-      totalCount
-    });
-
-    toast({
-      title: "Attendance Submitted",
-      description: `Total count: ${totalCount} recorded successfully.`,
-    });
-
-    // Reset form
-    setStep('service');
-    setAttendanceData({});
+    try {
+      // Create attendance records for each category
+      const attendanceRecords = [];
+      
+      for (const [category, count] of Object.entries(attendanceData)) {
+        if (count > 0) {
+          attendanceRecords.push({
+            service: selectedService,
+            service_date: selectedDate,
+            ministry_area: selectedMinistry,
+            section: selectedSection,
+            category: category,
+            count: count,
+            user_on_duty: userOnDuty
+          });
+        }
+      }
+      
+      // Insert all records
+      const { error } = await supabase
+        .from('attendance_records')
+        .insert(attendanceRecords);
+      
+      if (error) {
+        throw error;
+      }
+      
+      toast({
+        title: "Attendance Submitted Successfully",
+        description: `Total count: ${totalCount} recorded for ${selectedService}`,
+      });
+      
+      // Reset form
+      setStep('service');
+      setAttendanceData({});
+      
+    } catch (error) {
+      console.error("Error submitting attendance:", error);
+      toast({
+        title: "Error",
+        description: "Failed to submit attendance. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const currentCategories = ministryAreas[selectedMinistry as keyof typeof ministryAreas] || [];
