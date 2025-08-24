@@ -14,7 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      attendance_records: {
+        Row: {
+          category: string
+          count: number
+          created_at: string
+          id: string
+          ministry_area: string
+          section: string
+          service: string
+          service_date: string
+          updated_at: string
+          user_on_duty: string
+        }
+        Insert: {
+          category: string
+          count?: number
+          created_at?: string
+          id?: string
+          ministry_area: string
+          section: string
+          service: string
+          service_date: string
+          updated_at?: string
+          user_on_duty: string
+        }
+        Update: {
+          category?: string
+          count?: number
+          created_at?: string
+          id?: string
+          ministry_area?: string
+          section?: string
+          service?: string
+          service_date?: string
+          updated_at?: string
+          user_on_duty?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
