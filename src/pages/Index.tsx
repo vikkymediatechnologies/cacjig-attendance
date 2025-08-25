@@ -6,11 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { ChevronRight, Users, BarChart3, Calendar, Info, Church, Shield, CheckCircle, UserPlus, X } from "lucide-react";
+import Header from "@/components/Header";
+import { ChevronRight, Users, BarChart3, Info, Church, UserPlus, Clock, Shield } from "lucide-react";
 
 const Index = () => {
-  const [currentStep, setCurrentStep] = useState(0);
   const [showRegistration, setShowRegistration] = useState(false);
   const [registrationData, setRegistrationData] = useState({
     name: '',
@@ -20,62 +19,27 @@ const Index = () => {
   });
   const { toast } = useToast();
 
-  const flowSteps = [
+  const quickActions = [
     {
-      icon: Shield,
-      title: "PIN Authentication",
-      description: "Secure login with your unique PIN code"
-    },
-    {
-      icon: Calendar,
-      title: "Select Service",
-      description: "Choose date and service type"
-    },
-    {
-      icon: Users,
-      title: "Ministry & Section",
-      description: "Select your ministry area and section"
-    },
-    {
-      icon: CheckCircle,
       title: "Enter Attendance",
-      description: "Count and record attendance numbers"
-    },
-    {
-      icon: BarChart3,
-      title: "Leader Dashboard",
-      description: "View reports and analytics"
-    }
-  ];
-
-  const navigationCards = [
-    {
-      title: "Service Attendance",
-      description: "Secure PIN login and attendance entry",
+      description: "Record service attendance",
       icon: Users,
       href: "/attendance",
-      gradient: "from-church-primary to-church-secondary"
+      primary: true
     },
     {
       title: "Register as Usher",
-      description: "Register your name and get a PIN",
+      description: "Get your PIN and register",
       icon: UserPlus,
       action: () => setShowRegistration(true),
-      gradient: "from-church-secondary to-church-accent"
+      primary: false
     },
     {
-      title: "Leader Dashboard",
-      description: "View reports and analytics",
+      title: "View Reports",
+      description: "Leader dashboard and analytics",
       icon: BarChart3,
       href: "/dashboard",
-      gradient: "from-church-accent to-church-primary"
-    },
-    {
-      title: "About CACJIGM",
-      description: "Learn about our system",
-      icon: Info,
-      href: "/about",
-      gradient: "from-church-primary to-church-accent"
+      primary: false
     }
   ];
 
@@ -116,141 +80,118 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-church-bg-light to-background">
-      {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm animate-fade-in">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-church-primary to-church-secondary rounded-lg animate-scale-in">
-                <Church className="h-8 w-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
-                  CACJIGM
-                </h1>
-                <p className="text-muted-foreground">Church Attendance Management System</p>
-              </div>
-            </div>
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
-        <section className="text-center mb-12 animate-fade-in-up">
-          <h2 className="text-4xl md:text-5xl font-bold text-church-text-light mb-4">
-            Welcome to CACJIGM
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Streamlined attendance management for Christ Apostolic Church Jesus Is God Ministry. 
-            Track attendance across all services and ministry areas with precision and ease.
-          </p>
-          <Button 
-            size="lg" 
-            className="bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90 text-white px-8 py-3 text-lg hover:scale-105 transition-transform duration-300"
-            onClick={() => window.location.href = '/attendance'}
-          >
-            Enter Attendance System
-            <ChevronRight className="ml-2 h-5 w-5" />
-          </Button>
-        </section>
-
-        {/* System Flow */}
-        <section className="mb-12 animate-fade-in">
-          <h3 className="text-2xl font-bold text-center mb-8 text-church-text-light">
-            How It Works
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {flowSteps.map((step, index) => (
-              <Card 
-                key={index} 
-                className={`border-2 transition-all duration-300 cursor-pointer hover:shadow-lg ${
-                  index === currentStep 
-                    ? 'border-church-primary shadow-lg scale-105 animate-scale-in' 
-                    : 'border-border hover:border-church-secondary hover:scale-102'
-                } animate-slide-in-right`}
-                style={{ animationDelay: `${index * 100}ms` }}
-                onClick={() => setCurrentStep(index)}
-              >
-                <CardContent className="p-6 text-center">
-                  <div className={`mx-auto w-12 h-12 rounded-full flex items-center justify-center mb-4 transition-all duration-300 ${
-                    index === currentStep 
-                      ? 'bg-gradient-to-br from-church-primary to-church-secondary text-white' 
-                      : 'bg-muted text-muted-foreground'
-                  }`}>
-                    <step.icon className="h-6 w-6" />
-                  </div>
-                  <h4 className="font-semibold mb-2">{step.title}</h4>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+        <section className="text-center mb-16 animate-fade-in-up">
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-6">
+              <div className="inline-flex p-3 bg-gradient-to-br from-church-primary to-church-secondary rounded-2xl mb-4">
+                <Church className="h-10 w-10 text-white" />
+              </div>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">
+              Christ Apostolic Church
+              <span className="block text-2xl md:text-3xl bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
+                Jesus Is God Ministry
+              </span>
+            </h1>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Simple and efficient attendance management system for all services and ministry areas.
+            </p>
           </div>
         </section>
 
-        {/* Navigation Cards */}
+        {/* Quick Actions */}
+        <section className="mb-16 animate-fade-in">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {quickActions.map((action, index) => (
+                <Card 
+                  key={index}
+                  className={`group cursor-pointer transition-all duration-300 hover:scale-105 animate-scale-in ${
+                    action.primary ? 'border-church-primary/50 bg-gradient-to-br from-church-primary/5 to-church-secondary/5' : 'hover:border-church-primary/30'
+                  }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
+                  onClick={() => action.href ? window.location.href = action.href : action.action?.()}
+                >
+                  <CardHeader className="text-center pb-4">
+                    <div className={`mx-auto w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 ${
+                      action.primary 
+                        ? 'bg-gradient-to-br from-church-primary to-church-secondary' 
+                        : 'bg-muted'
+                    }`}>
+                      <action.icon className={`h-8 w-8 ${action.primary ? 'text-white' : 'text-muted-foreground'}`} />
+                    </div>
+                    <CardTitle className={`text-lg ${action.primary ? 'text-church-primary' : ''}`}>
+                      {action.title}
+                    </CardTitle>
+                    <CardDescription className="text-sm">
+                      {action.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0 text-center">
+                    <div className="flex items-center justify-center text-church-primary group-hover:translate-x-1 transition-transform duration-300">
+                      <span className="text-sm font-medium">Get Started</span>
+                      <ChevronRight className="ml-1 h-4 w-4" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works - Simplified */}
+        <section className="mb-16 animate-fade-in">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-2xl font-bold mb-8">How It Works</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="space-y-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-church-primary to-church-secondary rounded-full flex items-center justify-center mx-auto">
+                  <Shield className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold">Login with PIN</h3>
+                <p className="text-sm text-muted-foreground">Enter your name and PIN to get started</p>
+              </div>
+              <div className="space-y-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-church-secondary to-church-accent rounded-full flex items-center justify-center mx-auto">
+                  <Clock className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold">Select Service</h3>
+                <p className="text-sm text-muted-foreground">Choose the service you're recording for</p>
+              </div>
+              <div className="space-y-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-church-accent to-church-primary rounded-full flex items-center justify-center mx-auto">
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold">Record Attendance</h3>
+                <p className="text-sm text-muted-foreground">Count and submit attendance numbers</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Ministry Areas - Simplified */}
         <section className="animate-fade-in">
-          <h3 className="text-2xl font-bold text-center mb-8 text-church-text-light">
-            Quick Access
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {navigationCards.map((card, index) => (
-              <Card 
-                key={index}
-                className="group hover:shadow-lg hover:shadow-church-primary/10 transition-all duration-500 cursor-pointer border-0 overflow-hidden hover:scale-105 animate-scale-in"
-                style={{ animationDelay: `${index * 150}ms` }}
-                onClick={() => card.href ? window.location.href = card.href : card.action?.()}
-              >
-                <div className={`h-2 bg-gradient-to-r ${card.gradient}`} />
-                <CardHeader className="pb-4">
-                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${card.gradient} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300`}>
-                    <card.icon className="h-6 w-6 text-white" />
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-8">Ministry Areas</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                { name: "Main Church", count: "4 sections" },
+                { name: "Teens Church", count: "3 sections" },
+                { name: "Children Church", count: "3 sections" },
+                { name: "Car Park", count: "1 section" }
+              ].map((ministry, index) => (
+                <Card key={index} className="p-4 border-church-primary/20 hover:border-church-primary/40 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-church-primary">{ministry.name}</h3>
+                    <span className="text-sm text-muted-foreground">{ministry.count}</span>
                   </div>
-                  <CardTitle className="group-hover:text-church-primary transition-colors duration-300">
-                    {card.title}
-                  </CardTitle>
-                  <CardDescription>{card.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="flex items-center text-church-primary group-hover:translate-x-1 transition-transform duration-300">
-                    <span className="text-sm font-medium">Access</span>
-                    <ChevronRight className="ml-1 h-4 w-4" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* Ministry Areas */}
-        <section className="mt-16">
-          <h3 className="text-2xl font-bold text-center mb-8 text-church-text-light">
-            Ministry Areas
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { name: "Main Church", sections: ["Havilah", "Sub-Havilah", "Zion", "Sub-Zion"] },
-              { name: "Teens Church", sections: ["Male Teachers", "Female Teachers", "Teens"] },
-              { name: "Children Church", sections: ["Male Teachers", "Female Teachers", "Children"] },
-              { name: "Car Park", sections: ["Car Park Workers"] }
-            ].map((ministry, index) => (
-              <Card key={index} className="border-church-primary/20">
-                <CardHeader>
-                  <CardTitle className="text-church-primary">{ministry.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {ministry.sections.map((section, sIndex) => (
-                      <li key={sIndex} className="flex items-center text-sm">
-                        <div className="w-2 h-2 bg-church-secondary rounded-full mr-2" />
-                        {section}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            ))}
+                </Card>
+              ))}
+            </div>
           </div>
         </section>
       </main>

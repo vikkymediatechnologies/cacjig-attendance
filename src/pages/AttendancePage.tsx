@@ -19,15 +19,14 @@ interface AttendanceData {
 }
 
 const AttendancePage = () => {
-  const [step, setStep] = useState<'auth' | 'service' | 'ministry' | 'entry'>('auth');
+  const [step, setStep] = useState<'auth' | 'entry'>('auth');
   const [userName, setUserName] = useState('');
   const [pin, setPin] = useState('');
   const [userOnDuty, setUserOnDuty] = useState('');
   const [selectedService, setSelectedService] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedMinistry, setSelectedMinistry] = useState('');
-  const [selectedSection, setSelectedSection] = useState('');
-  const [attendanceData, setAttendanceData] = useState<Record<string, number>>({});
+  const [attendanceCount, setAttendanceCount] = useState('');
   const { toast } = useToast();
 
   // PIN verification with specific codes
@@ -78,106 +77,71 @@ const AttendancePage = () => {
 
     const user = verifyPin(pin);
     if (user) {
-      // Use the actual user name instead of the generic role name
       setUserOnDuty(userName.trim());
       
-      // Redirect leaders to dashboard
       if (user.role === 'leader') {
         window.location.href = '/dashboard';
         return;
       }
-      setStep('service');
-      toast({
-        title: "Authentication Successful",
-        description: `Welcome, ${userName}!`,
-      });
-    } else {
-      toast({
-        title: "Authentication Failed",
-        description: "Invalid PIN. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleServiceSelection = () => {
-    if (selectedService && selectedDate) {
-      setStep('ministry');
-    } else {
-      toast({
-        title: "Selection Required",
-        description: "Please select both service and date.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleMinistrySelection = () => {
-    if (selectedMinistry && selectedSection) {
       setStep('entry');
+      toast({
+        title: "Welcome!",
+        description: `Hello, ${userName}!`,
+      });
     } else {
       toast({
-        title: "Selection Required", 
-        description: "Please select ministry area and section.",
+        title: "Invalid PIN",
+        description: "Please check your PIN and try again.",
         variant: "destructive"
       });
     }
   };
 
-  const handleCountChange = (category: string, count: string) => {
-    setAttendanceData(prev => ({
-      ...prev,
-      [category]: parseInt(count) || 0
-    }));
-  };
 
   const handleSubmitAttendance = async () => {
-    const totalCount = Object.values(attendanceData).reduce((sum, count) => sum + count, 0);
-    
-    if (totalCount === 0) {
+    if (!selectedService || !selectedMinistry || !attendanceCount) {
       toast({
-        title: "No Data Entered",
-        description: "Please enter at least one attendance count.",
+        title: "Missing Information",
+        description: "Please fill in all fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const count = parseInt(attendanceCount);
+    if (count <= 0) {
+      toast({
+        title: "Invalid Count",
+        description: "Please enter a valid attendance number.",
         variant: "destructive"
       });
       return;
     }
 
     try {
-      // Create attendance records for each category
-      const attendanceRecords = [];
-      
-      for (const [category, count] of Object.entries(attendanceData)) {
-        if (count > 0) {
-          attendanceRecords.push({
-            service: selectedService,
-            service_date: selectedDate,
-            ministry_area: selectedMinistry,
-            section: selectedSection,
-            category: category,
-            count: count,
-            user_on_duty: userOnDuty
-          });
-        }
-      }
-      
-      // Insert all records
       const { error } = await supabase
         .from('attendance_records')
-        .insert(attendanceRecords);
+        .insert({
+          service: selectedService,
+          service_date: selectedDate,
+          ministry_area: selectedMinistry,
+          section: 'General',
+          category: 'Total',
+          count: count,
+          user_on_duty: userOnDuty
+        });
       
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       
       toast({
-        title: "Attendance Submitted Successfully",
-        description: `Total count: ${totalCount} recorded for ${selectedService}`,
+        title: "Success!",
+        description: `Attendance recorded: ${count} people`,
       });
       
       // Reset form
-      setStep('service');
-      setAttendanceData({});
+      setSelectedService('');
+      setSelectedMinistry('');
+      setAttendanceCount('');
       
     } catch (error) {
       console.error("Error submitting attendance:", error);
@@ -189,55 +153,48 @@ const AttendancePage = () => {
     }
   };
 
-  const currentCategories = ministryAreas[selectedMinistry as keyof typeof ministryAreas] || [];
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-church-bg-light to-background">
       {/* Header */}
       <header className="border-b bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between">
             <Button 
               variant="ghost" 
               size="sm"
               onClick={() => window.location.href = '/'}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
+              Back
             </Button>
-            <div className="flex items-center gap-2 ml-auto">
-              <Shield className="h-5 w-5 text-church-primary" />
-              <span className="font-medium">{userOnDuty || 'Not Authenticated'}</span>
-            </div>
+            {userOnDuty && (
+              <div className="flex items-center gap-2">
+                <Shield className="h-4 w-4 text-church-primary" />
+                <span className="text-sm font-medium">{userOnDuty}</span>
+              </div>
+            )}
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 max-w-lg">
         {step === 'auth' && (
-          <Card className="border-church-primary/20 animate-scale-in">
+          <Card className="animate-scale-in">
             <CardHeader className="text-center">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-church-primary to-church-secondary rounded-full flex items-center justify-center mb-4">
-                <Shield className="h-8 w-8 text-white" />
+              <div className="mx-auto w-12 h-12 bg-gradient-to-br from-church-primary to-church-secondary rounded-xl flex items-center justify-center mb-4">
+                <Shield className="h-6 w-6 text-white" />
               </div>
-              <CardTitle className="text-2xl">User Authentication</CardTitle>
-              <CardDescription>
-                Enter your name and PIN to access the attendance system:<br />
-                <span className="text-xs text-muted-foreground mt-2 block">
-                  1234 for Main Church • 5678 for Teens Church • 9012 for Children Church • 0000 for Leaders Dashboard
-                </span>
-              </CardDescription>
+              <CardTitle>Login to Continue</CardTitle>
+              <CardDescription>Enter your name and PIN to record attendance</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label htmlFor="user-name">Full Name</Label>
+                <Label htmlFor="user-name">Your Name</Label>
                 <Input
                   id="user-name"
-                  type="text"
                   placeholder="Enter your full name"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
-                  className="text-center"
                 />
               </div>
               <div>
@@ -248,29 +205,31 @@ const AttendancePage = () => {
                   placeholder="Enter your PIN"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
-                  className="text-center text-lg tracking-widest"
                   maxLength={6}
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Demo PINs: 1234 (Main) • 5678 (Teens) • 9012 (Children) • 0000 (Leader)
+                </p>
               </div>
               <Button 
                 onClick={handleAuthSubmit}
-                className="w-full bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90"
+                className="w-full"
                 disabled={pin.length < 4 || !userName.trim()}
               >
-                Authenticate
+                Continue
               </Button>
             </CardContent>
           </Card>
         )}
 
-        {step === 'service' && (
-          <Card className="border-church-primary/20 animate-fade-in">
+        {step === 'entry' && (
+          <Card className="animate-fade-in">
             <CardHeader className="text-center">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-church-secondary to-church-accent rounded-full flex items-center justify-center mb-4">
-                <Calendar className="h-8 w-8 text-white" />
+              <div className="mx-auto w-12 h-12 bg-gradient-to-br from-church-primary to-church-secondary rounded-xl flex items-center justify-center mb-4">
+                <Users className="h-6 w-6 text-white" />
               </div>
-              <CardTitle className="text-2xl">Select Service</CardTitle>
-              <CardDescription>Choose the service and date for attendance entry</CardDescription>
+              <CardTitle>Record Attendance</CardTitle>
+              <CardDescription>Fill in the service details and attendance count</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -282,11 +241,12 @@ const AttendancePage = () => {
                   onChange={(e) => setSelectedDate(e.target.value)}
                 />
               </div>
+              
               <div>
                 <Label htmlFor="service">Service</Label>
                 <Select value={selectedService} onValueChange={setSelectedService}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a service" />
+                    <SelectValue placeholder="Select service" />
                   </SelectTrigger>
                   <SelectContent>
                     {services.map((service) => (
@@ -297,31 +257,12 @@ const AttendancePage = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <Button 
-                onClick={handleServiceSelection}
-                className="w-full bg-gradient-to-r from-church-secondary to-church-accent hover:from-church-secondary/90 hover:to-church-accent/90"
-              >
-                Continue
-              </Button>
-            </CardContent>
-          </Card>
-        )}
 
-        {step === 'ministry' && (
-          <Card className="border-church-primary/20 animate-slide-in-right">
-            <CardHeader className="text-center">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-church-accent to-church-primary rounded-full flex items-center justify-center mb-4">
-                <Users className="h-8 w-8 text-white" />
-              </div>
-              <CardTitle className="text-2xl">Ministry & Section</CardTitle>
-              <CardDescription>Select your ministry area and assigned section</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="ministry">Ministry Area</Label>
                 <Select value={selectedMinistry} onValueChange={setSelectedMinistry}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select ministry area" />
+                    <SelectValue placeholder="Select ministry" />
                   </SelectTrigger>
                   <SelectContent>
                     {Object.keys(ministryAreas).map((ministry) => (
@@ -332,71 +273,23 @@ const AttendancePage = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div>
-                <Label htmlFor="section">Section</Label>
-                <Select value={selectedSection} onValueChange={setSelectedSection}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your section" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {sections.map((section) => (
-                      <SelectItem key={section} value={section}>
-                        {section}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button 
-                onClick={handleMinistrySelection}
-                className="w-full bg-gradient-to-r from-church-accent to-church-primary hover:from-church-accent/90 hover:to-church-primary/90"
-              >
-                Continue
-              </Button>
-            </CardContent>
-          </Card>
-        )}
 
-        {step === 'entry' && (
-          <Card className="border-church-primary/20 animate-fade-in-up">
-            <CardHeader className="text-center">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-church-primary to-church-accent rounded-full flex items-center justify-center mb-4">
-                <Hash className="h-8 w-8 text-white" />
-              </div>
-              <CardTitle className="text-2xl">Enter Attendance</CardTitle>
-              <CardDescription>
-                {selectedService} - {selectedDate}<br />
-                {selectedMinistry} ({selectedSection})<br />
-                <span className="text-church-primary font-medium">Recorded by: {userOnDuty}</span>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {currentCategories.map((category) => (
-                <div key={category}>
-                  <Label htmlFor={category}>{category}</Label>
-                  <Input
-                    id={category}
-                    type="number"
-                    placeholder="0"
-                    min="0"
-                    value={attendanceData[category] || ''}
-                    onChange={(e) => handleCountChange(category, e.target.value)}
-                  />
-                </div>
-              ))}
-              
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">Total Count:</span>
-                  <span className="text-2xl font-bold text-church-primary">
-                    {Object.values(attendanceData).reduce((sum, count) => sum + count, 0)}
-                  </span>
-                </div>
+              <div>
+                <Label htmlFor="count">Total Attendance Count</Label>
+                <Input
+                  id="count"
+                  type="number"
+                  placeholder="Enter total number of people"
+                  min="0"
+                  value={attendanceCount}
+                  onChange={(e) => setAttendanceCount(e.target.value)}
+                />
               </div>
 
               <Button 
                 onClick={handleSubmitAttendance}
-                className="w-full bg-gradient-to-r from-church-primary to-church-accent hover:from-church-primary/90 hover:to-church-accent/90"
+                className="w-full"
+                disabled={!selectedService || !selectedMinistry || !attendanceCount}
               >
                 Submit Attendance
               </Button>
