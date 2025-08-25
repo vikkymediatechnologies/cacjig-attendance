@@ -19,7 +19,8 @@ interface AttendanceData {
 }
 
 const AttendancePage = () => {
-  const [step, setStep] = useState<'pin' | 'service' | 'ministry' | 'entry'>('pin');
+  const [step, setStep] = useState<'auth' | 'service' | 'ministry' | 'entry'>('auth');
+  const [userName, setUserName] = useState('');
   const [pin, setPin] = useState('');
   const [userOnDuty, setUserOnDuty] = useState('');
   const [selectedService, setSelectedService] = useState('');
@@ -65,10 +66,21 @@ const AttendancePage = () => {
 
   const sections = ['Section A', 'Section B', 'Section C', 'Section D'];
 
-  const handlePinSubmit = () => {
+  const handleAuthSubmit = () => {
+    if (!userName.trim()) {
+      toast({
+        title: "Name Required",
+        description: "Please enter your full name.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const user = verifyPin(pin);
     if (user) {
-      setUserOnDuty(user.name);
+      // Use the actual user name instead of the generic role name
+      setUserOnDuty(userName.trim());
+      
       // Redirect leaders to dashboard
       if (user.role === 'leader') {
         window.location.href = '/dashboard';
@@ -77,7 +89,7 @@ const AttendancePage = () => {
       setStep('service');
       toast({
         title: "Authentication Successful",
-        description: `Welcome, ${user.name}!`,
+        description: `Welcome, ${userName}!`,
       });
     } else {
       toast({
@@ -202,21 +214,32 @@ const AttendancePage = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-2xl">
-        {step === 'pin' && (
-          <Card className="border-church-primary/20">
+        {step === 'auth' && (
+          <Card className="border-church-primary/20 animate-scale-in">
             <CardHeader className="text-center">
               <div className="mx-auto w-16 h-16 bg-gradient-to-br from-church-primary to-church-secondary rounded-full flex items-center justify-center mb-4">
                 <Shield className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl">PIN Authentication</CardTitle>
+              <CardTitle className="text-2xl">User Authentication</CardTitle>
               <CardDescription>
-                Enter your unique PIN:<br />
+                Enter your name and PIN to access the attendance system:<br />
                 <span className="text-xs text-muted-foreground mt-2 block">
                   1234 for Main Church • 5678 for Teens Church • 9012 for Children Church • 0000 for Leaders Dashboard
                 </span>
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="user-name">Full Name</Label>
+                <Input
+                  id="user-name"
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className="text-center"
+                />
+              </div>
               <div>
                 <Label htmlFor="pin">PIN Code</Label>
                 <Input
@@ -230,9 +253,9 @@ const AttendancePage = () => {
                 />
               </div>
               <Button 
-                onClick={handlePinSubmit}
+                onClick={handleAuthSubmit}
                 className="w-full bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90"
-                disabled={pin.length < 4}
+                disabled={pin.length < 4 || !userName.trim()}
               >
                 Authenticate
               </Button>
@@ -241,7 +264,7 @@ const AttendancePage = () => {
         )}
 
         {step === 'service' && (
-          <Card className="border-church-primary/20">
+          <Card className="border-church-primary/20 animate-fade-in">
             <CardHeader className="text-center">
               <div className="mx-auto w-16 h-16 bg-gradient-to-br from-church-secondary to-church-accent rounded-full flex items-center justify-center mb-4">
                 <Calendar className="h-8 w-8 text-white" />
@@ -285,7 +308,7 @@ const AttendancePage = () => {
         )}
 
         {step === 'ministry' && (
-          <Card className="border-church-primary/20">
+          <Card className="border-church-primary/20 animate-slide-in-right">
             <CardHeader className="text-center">
               <div className="mx-auto w-16 h-16 bg-gradient-to-br from-church-accent to-church-primary rounded-full flex items-center justify-center mb-4">
                 <Users className="h-8 w-8 text-white" />
@@ -335,7 +358,7 @@ const AttendancePage = () => {
         )}
 
         {step === 'entry' && (
-          <Card className="border-church-primary/20">
+          <Card className="border-church-primary/20 animate-fade-in-up">
             <CardHeader className="text-center">
               <div className="mx-auto w-16 h-16 bg-gradient-to-br from-church-primary to-church-accent rounded-full flex items-center justify-center mb-4">
                 <Hash className="h-8 w-8 text-white" />
@@ -343,7 +366,8 @@ const AttendancePage = () => {
               <CardTitle className="text-2xl">Enter Attendance</CardTitle>
               <CardDescription>
                 {selectedService} - {selectedDate}<br />
-                {selectedMinistry} ({selectedSection})
+                {selectedMinistry} ({selectedSection})<br />
+                <span className="text-church-primary font-medium">Recorded by: {userOnDuty}</span>
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
