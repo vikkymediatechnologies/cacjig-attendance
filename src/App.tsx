@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import AttendancePage from "./pages/AttendancePage";
 import DashboardPage from "./pages/DashboardPage";
+import LeaderDashboard from "./pages/LeaderDashboard";
 import SchedulePage from "./pages/SchedulePage";
 import AboutPage from "./pages/AboutPage";
 import NotFound from "./pages/NotFound";
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/login" element={<LoginPage />} />
             <Route path="/attendance" element={<AttendancePage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/leader" element={<LeaderDashboard />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/about" element={<AboutPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

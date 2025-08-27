@@ -53,6 +53,105 @@ export type Database = {
         }
         Relationships: []
       }
+      ministries: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          sections: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          sections?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          sections?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      roles: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ushers: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          ministry_id: string | null
+          name: string
+          pin: string
+          role_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          ministry_id?: string | null
+          name: string
+          pin: string
+          role_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          ministry_id?: string | null
+          name?: string
+          pin?: string
+          role_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ushers_ministry_id_fkey"
+            columns: ["ministry_id"]
+            isOneToOne: false
+            referencedRelation: "ministries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ushers_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

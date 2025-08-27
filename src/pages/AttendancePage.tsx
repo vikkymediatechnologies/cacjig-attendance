@@ -80,7 +80,7 @@ const AttendancePage = () => {
       setUserOnDuty(userName.trim());
       
       if (user.role === 'leader') {
-        window.location.href = '/dashboard';
+        window.location.href = '/leader';
         return;
       }
       setStep('entry');
@@ -177,7 +177,7 @@ const AttendancePage = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-lg">
+      <main className="container mx-auto px-4 py-8 max-w-2xl">
         {step === 'auth' && (
           <Card className="animate-scale-in">
             <CardHeader className="text-center">
@@ -223,78 +223,114 @@ const AttendancePage = () => {
         )}
 
         {step === 'entry' && (
-          <Card className="animate-fade-in">
-            <CardHeader className="text-center">
-              <div className="mx-auto w-12 h-12 bg-gradient-to-br from-church-primary to-church-secondary rounded-xl flex items-center justify-center mb-4">
-                <Users className="h-6 w-6 text-white" />
-              </div>
-              <CardTitle>Record Attendance</CardTitle>
-              <CardDescription>Fill in the service details and attendance count</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="date">Date</Label>
+          <div className="space-y-6 animate-fade-in">
+            {/* Date Selection Card */}
+            <Card className="hover-scale cursor-pointer transition-all duration-300">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Calendar className="h-5 w-5 text-church-primary" />
+                  Select Date
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
                 <Input
-                  id="date"
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
+                  className="text-center font-medium"
                 />
-              </div>
-              
-              <div>
-                <Label htmlFor="service">Service</Label>
-                <Select value={selectedService} onValueChange={setSelectedService}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select service" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {services.map((service) => (
-                      <SelectItem key={service} value={service}>
-                        {service}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div>
-                <Label htmlFor="ministry">Ministry Area</Label>
-                <Select value={selectedMinistry} onValueChange={setSelectedMinistry}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select ministry" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.keys(ministryAreas).map((ministry) => (
-                      <SelectItem key={ministry} value={ministry}>
-                        {ministry}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            {/* Service Selection */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Users className="h-5 w-5 text-church-secondary" />
+                Choose Service
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {services.map((service, index) => (
+                  <Card 
+                    key={service}
+                    className={`cursor-pointer transition-all duration-300 hover-scale animate-fade-in ${
+                      selectedService === service 
+                        ? 'ring-2 ring-church-primary bg-gradient-to-br from-church-primary/10 to-church-secondary/10' 
+                        : 'hover:border-church-primary/50'
+                    }`}
+                    style={{ animationDelay: `${index * 50}ms` }}
+                    onClick={() => setSelectedService(service)}
+                  >
+                    <CardContent className="p-4 text-center">
+                      <p className="font-medium text-sm">{service}</p>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
+            </div>
 
-              <div>
-                <Label htmlFor="count">Total Attendance Count</Label>
-                <Input
-                  id="count"
-                  type="number"
-                  placeholder="Enter total number of people"
-                  min="0"
-                  value={attendanceCount}
-                  onChange={(e) => setAttendanceCount(e.target.value)}
-                />
+            {/* Ministry Selection */}
+            {selectedService && (
+              <div className="animate-scale-in">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <Hash className="h-5 w-5 text-church-accent" />
+                  Select Ministry Area
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {Object.keys(ministryAreas).map((ministry, index) => (
+                    <Card 
+                      key={ministry}
+                      className={`cursor-pointer transition-all duration-300 hover-scale animate-fade-in ${
+                        selectedMinistry === ministry 
+                          ? 'ring-2 ring-church-secondary bg-gradient-to-br from-church-secondary/10 to-church-accent/10' 
+                          : 'hover:border-church-secondary/50'
+                      }`}
+                      style={{ animationDelay: `${index * 50}ms` }}
+                      onClick={() => setSelectedMinistry(ministry)}
+                    >
+                      <CardContent className="p-4 text-center">
+                        <p className="font-medium">{ministry}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {ministryAreas[ministry as keyof typeof ministryAreas].length} sections
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </div>
+            )}
 
-              <Button 
-                onClick={handleSubmitAttendance}
-                className="w-full"
-                disabled={!selectedService || !selectedMinistry || !attendanceCount}
-              >
-                Submit Attendance
-              </Button>
-            </CardContent>
-          </Card>
+            {/* Attendance Count */}
+            {selectedMinistry && (
+              <Card className="animate-scale-in">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Users className="h-5 w-5 text-church-primary" />
+                    Enter Attendance Count
+                  </CardTitle>
+                  <CardDescription>
+                    Total number of people present in {selectedMinistry}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    min="0"
+                    value={attendanceCount}
+                    onChange={(e) => setAttendanceCount(e.target.value)}
+                    className="text-center text-2xl font-bold h-16"
+                  />
+                  <Button 
+                    onClick={handleSubmitAttendance}
+                    className="w-full h-12 text-lg bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90"
+                    disabled={!attendanceCount || parseInt(attendanceCount) <= 0}
+                  >
+                    Submit Attendance ({attendanceCount || '0'} people)
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         )}
       </main>
     </div>
