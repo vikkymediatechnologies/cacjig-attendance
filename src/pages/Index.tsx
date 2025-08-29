@@ -46,15 +46,13 @@ const Index = () => {
   const ministryOptions = [
     'Main Church',
     'Teens Church', 
-    'Children Church',
+    'Infant Church',
     'Car Park',
-    'Bible Study'
+    'Dining with the King'
   ];
 
   const roleOptions = [
-    'Usher',
-    'Teacher',
-    'Worker',
+    'User',
     'Leader'
   ];
 
@@ -94,7 +92,7 @@ const Index = () => {
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
               Christ Apostolic Church
               <span className="block text-2xl md:text-3xl bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
-                Jesus Is God Ministry
+                Jehovah Is Great Ministries
               </span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -180,9 +178,9 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
                 { name: "Main Church", count: "4 sections" },
-                { name: "Teens Church", count: "3 sections" },
-                { name: "Children Church", count: "3 sections" },
-                { name: "Car Park", count: "1 section" }
+                { name: "Teens Church", count: "1 section" },
+                { name: "Infant Church", count: "1 section" },
+                { name: "Dining with the King", count: "1 section" }
               ].map((ministry, index) => (
                 <Card key={index} className="p-4 border-church-primary/20 hover:border-church-primary/40 transition-colors">
                   <div className="flex items-center justify-between">
@@ -287,7 +285,7 @@ const Index = () => {
       <footer className="border-t bg-card/50 backdrop-blur-sm mt-16 animate-fade-in">
         <div className="container mx-auto px-4 py-6 text-center">
           <p className="text-muted-foreground">
-            © 2024 CACJIGM - Christ Apostolic Church Jesus Is God Ministry
+            © 2024 CACJIGM - Christ Apostolic Church Jehovah Is Great Ministries
           </p>
         </div>
       </footer>

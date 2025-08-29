@@ -3,9 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Shield, Calendar, Users, Hash } from "lucide-react";
+import { ArrowLeft, Shield, Calendar, Users, Hash, Plus, Minus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AttendanceData {
@@ -26,44 +25,40 @@ const AttendancePage = () => {
   const [selectedService, setSelectedService] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedMinistry, setSelectedMinistry] = useState('');
-  const [attendanceCount, setAttendanceCount] = useState('');
+  const [attendanceCounts, setAttendanceCounts] = useState<{[key: string]: number}>({});
   const { toast } = useToast();
 
   // PIN verification with specific codes
   const verifyPin = (pin: string) => {
     const users = {
-      '1234': { name: 'Main Church Usher', role: 'usher', ministry: 'Main Church' },
-      '5678': { name: 'Teens Church Teacher', role: 'teacher', ministry: 'Teens Church' },
-      '9012': { name: 'Children Church Teacher', role: 'teacher', ministry: 'Children Church' },
+      '1234': { name: 'Main Church User', role: 'user', ministry: 'Main Church' },
+      '5678': { name: 'Teens Church User', role: 'user', ministry: 'Teens Church' },
+      '9012': { name: 'Infant Church User', role: 'user', ministry: 'Infant Church' },
       '0000': { name: 'Church Leader', role: 'leader', ministry: 'All' }
     };
     return users[pin as keyof typeof users];
   };
 
   const services = [
-    'Marathon Service (Sunday 6:00 AM)',
-    'First Service (Sunday 8:30 AM)', 
-    'Second Service (Sunday 11:00 AM)',
-    'Teens Church (Sunday 11:00 AM)',
-    'Children Church (Sunday 11:00 AM)',
-    'Take Charge of the Week (Monday 6:00 PM)',
-    'Wednesday Agbara Mountain Program (Wednesday 6:00 PM)',
-    'Dining with the King - Bible Study (Thursday 6:00 PM)',
-    'Holy Ghost Fire Night (3rd Friday 6:00 PM)',
-    'Arogungbogunmi (2nd Saturday 6:00 PM)',
-    'Bible Club Youth (Saturday 4:00 PM)',
-    'Bible Club Children (Saturday 4:00 PM)'
+    'First Service (Sunday 8:00 AM)', 
+    'Second Service (Sunday 10:00 AM)',
+    'Teens Church (Sunday 8:00 AM)',
+    'Infant Church (Sunday 8:00 AM)',
+    'Take Charge of the Week (Sunday 6:00 AM)',
+    'Arogungbogunmi (Monday 6:00 AM)',
+    'Wednesday Agbagra (Wednesday 8:30 AM)',
+    'Dining with the King (Thursday 5:00 PM)',
+    'Holy Ghost Fire Night (Friday 11:00 PM)',
+    'Bible Club Youth (2nd Saturday 11:00 AM)',
+    'Bible Club Children (2nd Saturday 11:00 AM)'
   ];
 
   const ministryAreas = {
     'Main Church': ['Havilah', 'Sub-Havilah', 'Zion', 'Sub-Zion'],
     'Teens Church': ['Male Teachers', 'Female Teachers', 'Teens'],
-    'Children Church': ['Male Teachers', 'Female Teachers', 'Children'],
-    'Car Park': ['Car Park Workers'],
-    'Bible Study': ['Children', 'Youth', 'Pastors', 'Adults (Male)', 'Adults (Female)']
+    'Infant Church': ['Male Teachers', 'Female Teachers', 'Children'],
+    'Dining with the King': ['General']
   };
-
-  const sections = ['Section A', 'Section B', 'Section C', 'Section D'];
 
   const handleAuthSubmit = () => {
     if (!userName.trim()) {
@@ -97,22 +92,45 @@ const AttendancePage = () => {
     }
   };
 
+  const updateCount = (section: string, change: number) => {
+    setAttendanceCounts(prev => ({
+      ...prev,
+      [section]: Math.max(0, (prev[section] || 0) + change)
+    }));
+  };
 
   const handleSubmitAttendance = async () => {
-    if (!selectedService || !selectedMinistry || !attendanceCount) {
+    if (!selectedService || !selectedMinistry) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all fields.",
+        description: "Please select service and ministry area.",
         variant: "destructive"
       });
       return;
     }
 
-    const count = parseInt(attendanceCount);
-    if (count <= 0) {
+    const sections = ministryAreas[selectedMinistry as keyof typeof ministryAreas];
+    const records = [];
+
+    for (const section of sections) {
+      const count = attendanceCounts[section] || 0;
+      if (count > 0) {
+        records.push({
+          service: selectedService,
+          service_date: selectedDate,
+          ministry_area: selectedMinistry,
+          section: section,
+          category: section.includes('Teacher') ? 'Teachers' : section === 'Teens' || section === 'Children' ? 'Students' : 'General',
+          count: count,
+          user_on_duty: userOnDuty
+        });
+      }
+    }
+
+    if (records.length === 0) {
       toast({
-        title: "Invalid Count",
-        description: "Please enter a valid attendance number.",
+        title: "No Attendance",
+        description: "Please enter attendance numbers.",
         variant: "destructive"
       });
       return;
@@ -121,27 +139,20 @@ const AttendancePage = () => {
     try {
       const { error } = await supabase
         .from('attendance_records')
-        .insert({
-          service: selectedService,
-          service_date: selectedDate,
-          ministry_area: selectedMinistry,
-          section: 'General',
-          category: 'Total',
-          count: count,
-          user_on_duty: userOnDuty
-        });
+        .insert(records);
       
       if (error) throw error;
       
+      const totalCount = Object.values(attendanceCounts).reduce((sum, count) => sum + count, 0);
       toast({
         title: "Success!",
-        description: `Attendance recorded: ${count} people`,
+        description: `Attendance recorded: ${totalCount} people across ${records.length} sections`,
       });
       
       // Reset form
       setSelectedService('');
       setSelectedMinistry('');
-      setAttendanceCount('');
+      setAttendanceCounts({});
       
     } catch (error) {
       console.error("Error submitting attendance:", error);
@@ -154,9 +165,9 @@ const AttendancePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-church-bg-light to-background">
+    <div className="min-h-screen bg-gradient-to-br from-church-bg-light to-background pt-20">
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm">
+      <header className="fixed top-0 left-0 right-0 z-50 w-full border-b bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Button 
@@ -177,28 +188,29 @@ const AttendancePage = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 max-w-4xl">
         {step === 'auth' && (
-          <Card className="animate-scale-in">
+          <Card className="animate-scale-in max-w-md mx-auto">
             <CardHeader className="text-center">
-              <div className="mx-auto w-12 h-12 bg-gradient-to-br from-church-primary to-church-secondary rounded-xl flex items-center justify-center mb-4">
-                <Shield className="h-6 w-6 text-white" />
+              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-church-primary to-church-secondary rounded-xl flex items-center justify-center mb-4">
+                <Shield className="h-8 w-8 text-white" />
               </div>
-              <CardTitle>Login to Continue</CardTitle>
-              <CardDescription>Enter your name and PIN to record attendance</CardDescription>
+              <CardTitle className="text-2xl">Attendance Entry</CardTitle>
+              <CardDescription>Simple and easy attendance recording</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <div>
-                <Label htmlFor="user-name">Your Name</Label>
+                <Label htmlFor="user-name" className="text-lg">Your Name</Label>
                 <Input
                   id="user-name"
                   placeholder="Enter your full name"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
+                  className="h-12 text-lg mt-2"
                 />
               </div>
               <div>
-                <Label htmlFor="pin">PIN Code</Label>
+                <Label htmlFor="pin" className="text-lg">PIN Code</Label>
                 <Input
                   id="pin"
                   type="password"
@@ -206,14 +218,15 @@ const AttendancePage = () => {
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
                   maxLength={6}
+                  className="h-12 text-lg mt-2 text-center"
                 />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Demo PINs: 1234 (Main) • 5678 (Teens) • 9012 (Children) • 0000 (Leader)
+                <p className="text-sm text-muted-foreground mt-2 text-center">
+                  Demo PINs: 1234 (Main) • 5678 (Teens) • 9012 (Infant) • 0000 (Leader)
                 </p>
               </div>
               <Button 
                 onClick={handleAuthSubmit}
-                className="w-full"
+                className="w-full h-14 text-lg bg-gradient-to-r from-church-primary to-church-secondary"
                 disabled={pin.length < 4 || !userName.trim()}
               >
                 Continue
@@ -223,13 +236,13 @@ const AttendancePage = () => {
         )}
 
         {step === 'entry' && (
-          <div className="space-y-6 animate-fade-in">
-            {/* Date Selection Card */}
-            <Card className="hover-scale cursor-pointer transition-all duration-300">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Calendar className="h-5 w-5 text-church-primary" />
-                  Select Date
+          <div className="space-y-8 animate-fade-in">
+            {/* Step 1: Date Selection */}
+            <Card className="border-2 border-church-primary/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Calendar className="h-6 w-6 text-church-primary" />
+                  Step 1: Select Date
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -237,96 +250,131 @@ const AttendancePage = () => {
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="text-center font-medium"
+                  className="text-center font-medium h-12 text-lg"
                 />
               </CardContent>
             </Card>
 
-            {/* Service Selection */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Users className="h-5 w-5 text-church-secondary" />
-                Choose Service
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {services.map((service, index) => (
-                  <Card 
-                    key={service}
-                    className={`cursor-pointer transition-all duration-300 hover-scale animate-fade-in ${
-                      selectedService === service 
-                        ? 'ring-2 ring-church-primary bg-gradient-to-br from-church-primary/10 to-church-secondary/10' 
-                        : 'hover:border-church-primary/50'
-                    }`}
-                    style={{ animationDelay: `${index * 50}ms` }}
-                    onClick={() => setSelectedService(service)}
-                  >
-                    <CardContent className="p-4 text-center">
-                      <p className="font-medium text-sm">{service}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-
-            {/* Ministry Selection */}
-            {selectedService && (
-              <div className="animate-scale-in">
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                  <Hash className="h-5 w-5 text-church-accent" />
-                  Select Ministry Area
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {Object.keys(ministryAreas).map((ministry, index) => (
+            {/* Step 2: Service Selection */}
+            <Card className="border-2 border-church-primary/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Users className="h-6 w-6 text-church-secondary" />
+                  Step 2: Choose Service
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {services.map((service) => (
                     <Card 
-                      key={ministry}
-                      className={`cursor-pointer transition-all duration-300 hover-scale animate-fade-in ${
-                        selectedMinistry === ministry 
-                          ? 'ring-2 ring-church-secondary bg-gradient-to-br from-church-secondary/10 to-church-accent/10' 
-                          : 'hover:border-church-secondary/50'
+                      key={service}
+                      className={`cursor-pointer transition-all duration-300 hover:scale-105 ${
+                        selectedService === service 
+                          ? 'ring-2 ring-church-primary bg-gradient-to-br from-church-primary/10 to-church-secondary/10' 
+                          : 'hover:border-church-primary/50'
                       }`}
-                      style={{ animationDelay: `${index * 50}ms` }}
-                      onClick={() => setSelectedMinistry(ministry)}
+                      onClick={() => setSelectedService(service)}
                     >
                       <CardContent className="p-4 text-center">
-                        <p className="font-medium">{ministry}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {ministryAreas[ministry as keyof typeof ministryAreas].length} sections
-                        </p>
+                        <p className="font-medium text-sm">{service}</p>
                       </CardContent>
                     </Card>
                   ))}
                 </div>
-              </div>
+              </CardContent>
+            </Card>
+
+            {/* Step 3: Ministry Selection */}
+            {selectedService && (
+              <Card className="border-2 border-church-primary/20 animate-scale-in">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    <Hash className="h-6 w-6 text-church-accent" />
+                    Step 3: Select Ministry Area
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.keys(ministryAreas).map((ministry) => (
+                      <Card 
+                        key={ministry}
+                        className={`cursor-pointer transition-all duration-300 hover:scale-105 ${
+                          selectedMinistry === ministry 
+                            ? 'ring-2 ring-church-secondary bg-gradient-to-br from-church-secondary/10 to-church-accent/10' 
+                            : 'hover:border-church-secondary/50'
+                        }`}
+                        onClick={() => setSelectedMinistry(ministry)}
+                      >
+                        <CardContent className="p-4 text-center">
+                          <p className="font-medium text-lg">{ministry}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             )}
 
-            {/* Attendance Count */}
+            {/* Step 4: Attendance Count */}
             {selectedMinistry && (
-              <Card className="animate-scale-in">
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Users className="h-5 w-5 text-church-primary" />
-                    Enter Attendance Count
+              <Card className="border-2 border-church-primary/20 animate-scale-in">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    <Users className="h-6 w-6 text-church-primary" />
+                    Step 4: Count People
                   </CardTitle>
-                  <CardDescription>
-                    Total number of people present in {selectedMinistry}
+                  <CardDescription className="text-lg">
+                    Use the large buttons to count people in {selectedMinistry}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <Input
-                    type="number"
-                    placeholder="0"
-                    min="0"
-                    value={attendanceCount}
-                    onChange={(e) => setAttendanceCount(e.target.value)}
-                    className="text-center text-2xl font-bold h-16"
-                  />
-                  <Button 
-                    onClick={handleSubmitAttendance}
-                    className="w-full h-12 text-lg bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90"
-                    disabled={!attendanceCount || parseInt(attendanceCount) <= 0}
-                  >
-                    Submit Attendance ({attendanceCount || '0'} people)
-                  </Button>
+                <CardContent className="space-y-6">
+                  <div className="grid gap-6">
+                    {ministryAreas[selectedMinistry as keyof typeof ministryAreas].map((section) => (
+                      <div key={section} className="p-6 bg-muted/50 rounded-lg">
+                        <h3 className="text-xl font-semibold mb-4 text-center">{section}</h3>
+                        <div className="flex items-center justify-center gap-6">
+                          <Button
+                            variant="outline"
+                            size="lg"
+                            onClick={() => updateCount(section, -1)}
+                            disabled={(attendanceCounts[section] || 0) === 0}
+                            className="h-16 w-16 text-2xl"
+                          >
+                            <Minus className="h-8 w-8" />
+                          </Button>
+                          
+                          <div className="text-center">
+                            <div className="text-4xl font-bold text-church-primary">
+                              {attendanceCounts[section] || 0}
+                            </div>
+                            <div className="text-sm text-muted-foreground">People</div>
+                          </div>
+                          
+                          <Button
+                            variant="outline"
+                            size="lg"
+                            onClick={() => updateCount(section, 1)}
+                            className="h-16 w-16 text-2xl"
+                          >
+                            <Plus className="h-8 w-8" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="text-center p-6 bg-gradient-to-r from-church-primary/10 to-church-secondary/10 rounded-lg">
+                    <div className="text-2xl font-bold text-church-primary mb-2">
+                      Total: {Object.values(attendanceCounts).reduce((sum, count) => sum + count, 0)} People
+                    </div>
+                    <Button 
+                      onClick={handleSubmitAttendance}
+                      className="w-full h-16 text-xl bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90"
+                      disabled={Object.values(attendanceCounts).reduce((sum, count) => sum + count, 0) === 0}
+                    >
+                      Submit Attendance
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             )}

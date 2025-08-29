@@ -7,43 +7,42 @@ const SchedulePage = () => {
     {
       day: "Sunday",
       programs: [
-        { name: "Marathon Service", time: "6:00 AM - 8:00 AM", location: "Main Auditorium", ministry: "All" },
-        { name: "First Service", time: "8:30 AM - 10:30 AM", location: "Main Auditorium", ministry: "Main Church" },
-        { name: "Second Service", time: "11:00 AM - 1:00 PM", location: "Main Auditorium", ministry: "Main Church" },
-        { name: "Teens Church", time: "11:00 AM - 12:30 PM", location: "Teen Center", ministry: "Teens" },
-        { name: "Children Church", time: "11:00 AM - 12:00 PM", location: "Children Hall", ministry: "Children" }
+        { name: "Take Charge of the Week", time: "6:00 AM - 8:00 AM", location: "Main Auditorium", ministry: "All" },
+        { name: "First Service", time: "8:00 AM - 10:00 AM", location: "Main Auditorium", ministry: "Main Church" },
+        { name: "Second Service", time: "10:00 AM - 12:00 PM", location: "Main Auditorium", ministry: "Main Church" },
+        { name: "Teens Church", time: "8:00 AM - 10:00 AM", location: "Teen Center", ministry: "Teens" },
+        { name: "Infant Church", time: "8:00 AM - 10:00 AM", location: "Children Hall", ministry: "Children" }
       ]
     },
     {
       day: "Monday", 
       programs: [
-        { name: "Take Charge of the Week", time: "6:00 PM - 8:00 PM", location: "Main Auditorium", ministry: "All" }
+        { name: "Arogungbogunmi", time: "6:00 AM - 8:00 AM", location: "Main Auditorium", ministry: "All" }
       ]
     },
     {
       day: "Wednesday",
       programs: [
-        { name: "Agbara Mountain Program", time: "6:00 PM - 8:00 PM", location: "Main Auditorium", ministry: "All" }
+        { name: "Wednesday Agbagra", time: "8:30 AM - 10:30 AM", location: "Main Auditorium", ministry: "All" }
       ]
     },
     {
       day: "Thursday",
       programs: [
-        { name: "Dining with the King (Bible Study)", time: "6:00 PM - 8:00 PM", location: "Various Locations", ministry: "All" }
+        { name: "Dining with the King", time: "5:00 PM - 7:00 PM", location: "Various Locations", ministry: "All" }
       ]
     },
     {
       day: "Friday",
       programs: [
-        { name: "Holy Ghost Fire Night", time: "6:00 PM - 10:00 PM", location: "Main Auditorium", ministry: "All", note: "3rd Friday monthly" }
+        { name: "Holy Ghost Fire Night", time: "11:00 PM - 2:00 AM", location: "Main Auditorium", ministry: "All", note: "3rd Friday monthly" }
       ]
     },
     {
       day: "Saturday",
       programs: [
-        { name: "Arogungbogunmi", time: "6:00 PM - 9:00 PM", location: "Main Auditorium", ministry: "All", note: "2nd Saturday monthly" },
-        { name: "Bible Club (Youth)", time: "4:00 PM - 6:00 PM", location: "Youth Center", ministry: "Youth" },
-        { name: "Bible Club (Children)", time: "4:00 PM - 5:30 PM", location: "Children Hall", ministry: "Children" }
+        { name: "Bible Club (Youth)", time: "11:00 AM - 1:00 PM", location: "Youth Center", ministry: "Youth", note: "2nd Saturday monthly" },
+        { name: "Bible Club (Children)", time: "11:00 AM - 12:30 PM", location: "Children Hall", ministry: "Children", note: "2nd Saturday monthly" }
       ]
     }
   ];
@@ -87,7 +86,7 @@ const SchedulePage = () => {
             CACJIGM Weekly Schedule
           </h1>
           <p className="text-muted-foreground">
-            Complete program schedule for Christ Apostolic Church Jesus Is God Ministry
+            Complete program schedule for Christ Apostolic Church Jehovah Is Great Ministries
           </p>
         </div>
 
@@ -150,8 +149,8 @@ const SchedulePage = () => {
               {[
                 { name: "Main Church", description: "Adult congregation in main auditorium", sections: "Havilah, Sub-Havilah, Zion, Sub-Zion" },
                 { name: "Teens Church", description: "Teenage members aged 13-19", sections: "Male Teachers, Female Teachers, Teens" },
-                { name: "Children Church", description: "Children aged 3-12", sections: "Male Teachers, Female Teachers, Children" },
-                { name: "Support Ministry", description: "Car park and logistics", sections: "Car Park Workers, Security" }
+                { name: "Infant Church", description: "Children aged 3-12", sections: "Male Teachers, Female Teachers, Children" },
+                { name: "Dining with the King", description: "Fellowship and teaching ministry", sections: "One Section" }
               ].map((ministry, index) => (
                 <div key={index} className="p-4 bg-muted/50 rounded-lg">
                   <h4 className="font-semibold text-church-primary mb-2">{ministry.name}</h4>
