@@ -183,14 +183,14 @@ const Index = () => {
                   </div>
 
                   {/* Main Title with Flip Animation */}
-                  <div className="mb-6">
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-4 animate-fade-in-up">
+                  <div className="mb-4">
+                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-3 animate-fade-in-up">
                       {slide.title}
                     </h1>
-                    <div className="h-20 md:h-24 flex items-center justify-center">
+                    <div className="h-12 md:h-16 flex items-center justify-center">
                       <span 
                         key={currentTextIndex}
-                        className="block text-3xl md:text-5xl lg:text-6xl bg-gradient-to-r from-church-accent via-church-secondary to-white bg-clip-text text-transparent animate-text-flip font-bold"
+                        className="block text-lg md:text-2xl lg:text-3xl bg-gradient-to-r from-church-accent via-church-secondary to-white bg-clip-text text-transparent animate-text-flip font-bold"
                       >
                         {heroTexts[currentTextIndex]}
                       </span>
@@ -198,32 +198,32 @@ const Index = () => {
                   </div>
 
                   {/* Subtitle */}
-                  <h2 className="text-2xl md:text-4xl lg:text-5xl font-semibold text-church-secondary mb-6 animate-slide-up">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-church-secondary mb-4 animate-slide-up">
                     {slide.subtitle}
                   </h2>
 
                   {/* Description */}
-                  <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in">
+                  <p className="text-sm md:text-base lg:text-lg text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in">
                     {slide.description}
                   </p>
                   
                   {/* Call to Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-6 justify-center animate-slide-up">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">
                     <Button 
-                      size="lg"
-                      className="bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90 text-white text-xl px-10 py-8 rounded-3xl transition-all duration-500 hover:scale-110 shadow-2xl border-2 border-white/20 backdrop-blur-sm"
+                      size="default"
+                      className="bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90 text-white text-sm md:text-base px-6 py-3 rounded-2xl transition-all duration-300 hover:scale-105 shadow-xl border border-white/20 backdrop-blur-sm"
                       onClick={() => window.location.href = "/attendance"}
                     >
-                      <Play className="mr-3 h-6 w-6" />
+                      <Play className="mr-2 h-4 w-4" />
                       {slide.cta}
                     </Button>
                     <Button 
-                      size="lg"
+                      size="default"
                       variant="outline"
-                      className="bg-white/10 backdrop-blur-xl border-2 border-white/50 hover:bg-white/20 text-white text-xl px-10 py-8 rounded-3xl transition-all duration-500 hover:scale-110 shadow-2xl"
+                      className="bg-white/10 backdrop-blur-xl border border-white/50 hover:bg-white/20 text-white text-sm md:text-base px-6 py-3 rounded-2xl transition-all duration-300 hover:scale-105 shadow-xl"
                       onClick={() => setShowRegistration(true)}
                     >
-                      <UserPlus className="mr-3 h-6 w-6" />
+                      <UserPlus className="mr-2 h-4 w-4" />
                       Register Now
                     </Button>
                   </div>
@@ -265,11 +265,11 @@ const Index = () => {
           <div className="relative z-10 bg-background/95 backdrop-blur-sm">
             <div className="container mx-auto px-4 py-16">
               <div className="max-w-6xl mx-auto">
-                <div className="text-center mb-16">
-                  <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
+                <div className="text-center mb-12">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
                     Quick Actions
                   </h2>
-                  <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
                     Get started with our powerful attendance management system
                   </p>
                 </div>
@@ -327,10 +327,10 @@ const Index = () => {
           <div className="relative z-10 bg-card/90 backdrop-blur-sm">
             <div className="container mx-auto px-4 py-16">
               <div className="max-w-6xl mx-auto text-center">
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 animate-fade-in">
                   Why Choose Our System?
                 </h2>
-                <p className="text-xl text-muted-foreground mb-16 max-w-3xl mx-auto animate-slide-up">
+                <p className="text-base md:text-lg text-muted-foreground mb-12 max-w-3xl mx-auto animate-slide-up">
                   Experience the future of church attendance management with our innovative features
                 </p>
                 
@@ -375,8 +375,8 @@ const Index = () => {
                       <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-church-primary to-church-secondary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                         <feature.icon className="h-8 w-8 text-white" />
                       </div>
-                      <h3 className="text-xl font-semibold mb-4 text-church-primary">{feature.title}</h3>
-                      <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                      <h3 className="text-lg font-semibold mb-3 text-church-primary">{feature.title}</h3>
+                      <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{feature.description}</p>
                     </div>
                   ))}
                 </div>
@@ -404,10 +404,10 @@ const Index = () => {
           <div className="relative z-10 bg-background/95 backdrop-blur-sm">
             <div className="container mx-auto px-4 py-16">
               <div className="max-w-6xl mx-auto text-center">
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white animate-fade-in">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white animate-fade-in">
                   How It Works
                 </h2>
-                <p className="text-xl text-white/80 mb-16 max-w-3xl mx-auto animate-slide-up">
+                <p className="text-base md:text-lg text-white/80 mb-12 max-w-3xl mx-auto animate-slide-up">
                   Simple, secure, and efficient - get started in three easy steps
                 </p>
                 
@@ -442,8 +442,8 @@ const Index = () => {
                             {step.step}
                           </div>
                         </div>
-                        <h3 className="text-2xl font-semibold mb-4 text-white">{step.title}</h3>
-                        <p className="text-white/80 text-lg leading-relaxed">{step.description}</p>
+                        <h3 className="text-lg font-semibold mb-3 text-white">{step.title}</h3>
+                        <p className="text-white/80 text-sm md:text-base leading-relaxed">{step.description}</p>
                       </div>
                       {index < 2 && (
                         <div className="hidden md:block absolute top-12 left-full w-12 border-t-2 border-dashed border-white/40 transform translate-x-6"></div>
@@ -461,11 +461,11 @@ const Index = () => {
           <div className="relative z-10 bg-card/95 backdrop-blur-sm">
             <div className="container mx-auto px-4 py-16">
               <div className="max-w-6xl mx-auto">
-                <div className="text-center mb-16">
-                  <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
+                <div className="text-center mb-12">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
                     Ministry Areas
                   </h2>
-                  <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
                     Comprehensive attendance management across all church ministries
                   </p>
                 </div>
@@ -508,12 +508,12 @@ const Index = () => {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-xl font-semibold text-church-primary">{ministry.name}</h3>
-                            <span className="text-sm font-medium text-church-secondary bg-church-secondary/10 px-3 py-1 rounded-full">
+                            <h3 className="text-lg font-semibold text-church-primary">{ministry.name}</h3>
+                            <span className="text-xs font-medium text-church-secondary bg-church-secondary/10 px-2 py-1 rounded-full">
                               {ministry.count}
                             </span>
                           </div>
-                          <p className="text-muted-foreground leading-relaxed">{ministry.description}</p>
+                          <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{ministry.description}</p>
                         </div>
                       </div>
                     </Card>
