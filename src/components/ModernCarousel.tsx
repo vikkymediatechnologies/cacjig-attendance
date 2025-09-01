@@ -120,37 +120,37 @@ const ModernCarousel = ({
 
                 {/* Title with Staggered Animation */}
                 <div className="mb-6">
-                  <h1 className={`text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 transition-all duration-1000 ${isActive ? 'animate-fade-in-up' : 'opacity-0 translate-y-8'}`}>
+                  <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 transition-all duration-1000 ${isActive ? 'animate-fade-in-up' : 'opacity-0 translate-y-8'}`}>
                     {slide.title}
                   </h1>
-                  <h2 className={`text-xl md:text-3xl lg:text-4xl font-semibold bg-gradient-to-r from-church-accent via-church-secondary to-white bg-clip-text text-transparent transition-all duration-1000 delay-200 ${isActive ? 'animate-fade-in-up' : 'opacity-0 translate-y-8'}`}>
+                  <h2 className={`text-lg md:text-xl lg:text-2xl font-semibold text-white/90 transition-all duration-1000 delay-200 ${isActive ? 'animate-fade-in-up' : 'opacity-0 translate-y-8'}`}>
                     {slide.subtitle}
                   </h2>
                 </div>
 
                 {/* Description */}
-                <p className={`text-lg md:text-xl lg:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-400 ${isActive ? 'animate-fade-in' : 'opacity-0 translate-y-8'}`}>
+                <p className={`text-base md:text-lg text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed transition-all duration-1000 delay-400 ${isActive ? 'animate-fade-in' : 'opacity-0 translate-y-8'}`}>
                   {slide.description}
                 </p>
                 
                 {/* Enhanced Action Buttons */}
-                <div className={`flex flex-col sm:flex-row gap-6 justify-center items-center transition-all duration-1000 delay-600 ${isActive ? 'animate-slide-up' : 'opacity-0 translate-y-8'}`}>
+                <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center transition-all duration-1000 delay-600 ${isActive ? 'animate-slide-up' : 'opacity-0 translate-y-8'}`}>
                   <Button 
-                    size="lg"
-                    className="group bg-gradient-to-r from-church-primary via-church-secondary to-church-accent hover:from-church-primary/90 hover:via-church-secondary/90 hover:to-church-accent/90 text-white text-lg px-10 py-4 rounded-3xl font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 border border-white/20 backdrop-blur-sm"
+                    size="default"
+                    className="group bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90 text-white px-8 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20 backdrop-blur-sm"
                     onClick={() => onCTAClick?.(slide.id)}
                   >
-                    <Play className="mr-3 h-6 w-6 group-hover:scale-125 transition-transform duration-300" />
+                    <Play className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
                     {slide.cta}
                   </Button>
                   
                   <Button 
-                    size="lg"
+                    size="default"
                     variant="outline"
-                    className="group bg-white/10 backdrop-blur-2xl border-2 border-white/50 hover:bg-white/20 hover:border-white/70 text-white text-lg px-10 py-4 rounded-3xl font-semibold transition-all duration-300 hover:scale-110 shadow-xl"
+                    className="group bg-white/10 backdrop-blur-xl border border-white/40 hover:bg-white/20 hover:border-white/60 text-white px-8 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 shadow-lg"
                     onClick={onRegisterClick}
                   >
-                    <UserPlus className="mr-3 h-6 w-6 group-hover:rotate-12 transition-transform duration-300" />
+                    <UserPlus className="mr-2 h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
                     Register Now
                   </Button>
                 </div>

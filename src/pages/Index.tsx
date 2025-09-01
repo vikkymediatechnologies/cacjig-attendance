@@ -160,10 +160,10 @@ const Index = () => {
                   <div className="inline-block p-4 bg-gradient-to-r from-church-primary/10 to-church-secondary/10 rounded-3xl mb-6">
                     <Sparkles className="h-12 w-12 text-church-primary" />
                   </div>
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-church-primary via-church-secondary to-church-accent bg-clip-text text-transparent">
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-church-primary">
                     Get Started Today
                   </h2>
-                  <p className="text-xl md:text-2xl text-church-text-light/80 max-w-4xl mx-auto leading-relaxed">
+                  <p className="text-base md:text-lg text-church-text-light/80 max-w-3xl mx-auto leading-relaxed">
                     Transform your church experience with our powerful attendance management system
                   </p>
                 </div>
@@ -184,17 +184,17 @@ const Index = () => {
                         <div className={`mx-auto w-28 h-28 rounded-3xl flex items-center justify-center mb-8 transition-all duration-500 group-hover:scale-125 group-hover:rotate-12 bg-gradient-to-br ${action.gradient} shadow-2xl`}>
                           <action.icon className="h-14 w-14 text-white" />
                         </div>
-                        <CardTitle className="text-2xl mb-4 text-church-primary group-hover:text-church-secondary transition-colors duration-300">
+                        <CardTitle className="text-xl mb-3 text-church-primary group-hover:text-church-secondary transition-colors duration-300">
                           {action.title}
                         </CardTitle>
-                        <CardDescription className="text-lg leading-relaxed">
+                        <CardDescription className="text-base leading-relaxed">
                           {action.description}
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="pt-0 pb-12 text-center">
-                        <div className="flex items-center justify-center text-church-primary group-hover:text-church-secondary group-hover:translate-x-4 transition-all duration-300">
-                          <span className="text-lg font-bold">Explore Now</span>
-                          <ChevronRight className="ml-3 h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
+                        <div className="flex items-center justify-center text-church-primary group-hover:text-church-secondary group-hover:translate-x-2 transition-all duration-300">
+                          <span className="text-base font-semibold">Explore Now</span>
+                          <ChevronRight className="ml-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
                         </div>
                       </CardContent>
                     </Card>
@@ -223,10 +223,10 @@ const Index = () => {
                   <div className="inline-block p-4 bg-gradient-to-r from-church-secondary/10 to-church-accent/10 rounded-3xl mb-6">
                     <Award className="h-12 w-12 text-church-secondary" />
                   </div>
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-church-primary">
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-church-primary">
                     Why Choose Our Platform?
                   </h2>
-                  <p className="text-xl md:text-2xl text-church-text-light/80 mb-16 max-w-4xl mx-auto leading-relaxed">
+                  <p className="text-base md:text-lg text-church-text-light/80 mb-12 max-w-3xl mx-auto leading-relaxed">
                     Discover the advanced features that make church attendance management effortless
                   </p>
                 </div>
@@ -278,10 +278,10 @@ const Index = () => {
                       <div className={`w-20 h-20 mx-auto mb-8 rounded-3xl bg-gradient-to-br ${feature.color} flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500 shadow-xl`}>
                         <feature.icon className="h-10 w-10 text-white" />
                       </div>
-                      <h3 className="text-2xl font-bold mb-4 text-church-primary group-hover:text-church-secondary transition-colors duration-300">
+                      <h3 className="text-lg font-bold mb-3 text-church-primary group-hover:text-church-secondary transition-colors duration-300">
                         {feature.title}
                       </h3>
-                      <p className="text-lg text-church-text-light/80 leading-relaxed">
+                      <p className="text-base text-church-text-light/80 leading-relaxed">
                         {feature.description}
                       </p>
                     </div>
@@ -315,10 +315,10 @@ const Index = () => {
                   <div className="inline-block p-4 bg-gradient-to-r from-church-accent/10 to-church-primary/10 rounded-3xl mb-6">
                     <Church className="h-12 w-12 text-church-accent" />
                   </div>
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-church-primary">
                     Ministry Coverage
                   </h2>
-                  <p className="text-xl md:text-2xl text-church-text-light/80 max-w-4xl mx-auto leading-relaxed">
+                  <p className="text-base md:text-lg text-church-text-light/80 max-w-3xl mx-auto leading-relaxed">
                     Comprehensive attendance management across all church ministries and programs
                   </p>
                 </div>
@@ -367,14 +367,14 @@ const Index = () => {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl font-bold text-church-primary group-hover:text-church-secondary transition-colors duration-300">
+                            <h3 className="text-lg font-bold text-church-primary group-hover:text-church-secondary transition-colors duration-300">
                               {ministry.name}
                             </h3>
                             <span className="text-sm font-bold text-white bg-gradient-to-r from-church-secondary to-church-accent px-4 py-2 rounded-full shadow-lg">
                               {ministry.count}
                             </span>
                           </div>
-                          <p className="text-lg text-church-text-light/80 leading-relaxed mb-4">
+                          <p className="text-base text-church-text-light/80 leading-relaxed mb-4">
                             {ministry.description}
                           </p>
                           <div className="flex items-center text-church-primary font-semibold">
@@ -403,12 +403,12 @@ const Index = () => {
                 </div>
                 <h3 className="text-2xl font-bold">CACJIGM</h3>
               </div>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base text-white/90 max-w-2xl mx-auto leading-relaxed">
                 Christ Apostolic Church Jehovah Is Great Ministries - Leading the future of church attendance management
               </p>
             </div>
             <div className="border-t border-white/20 pt-8">
-              <p className="text-white/70 text-lg">
+              <p className="text-white/70 text-base">
                 © 2024 CACJIGM. All rights reserved. Built with ❤️ for the church community.
               </p>
             </div>
