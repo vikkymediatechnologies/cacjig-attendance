@@ -7,14 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
-import { ChevronRight, Users, BarChart3, Church, UserPlus, Clock, Shield, CheckSquare, Calendar, MapPin, Play, Star, Heart, Globe, Zap, Target } from "lucide-react";
+import ModernCarousel from "@/components/ModernCarousel";
+import { ChevronRight, Users, BarChart3, Church, UserPlus, Clock, Shield, CheckSquare, Calendar, MapPin, Star, Heart, Globe, Zap, Target, Sparkles, Award, TrendingUp } from "lucide-react";
 import churchAttendanceHero from "@/assets/church-attendance-hero.jpg";
 
 const Index = () => {
   const [showRegistration, setShowRegistration] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [registrationData, setRegistrationData] = useState({
     name: '',
     pin: '',
@@ -23,30 +22,30 @@ const Index = () => {
   });
   const { toast } = useToast();
 
-  const heroTexts = [
-    "Transform Your Church Experience",
-    "Seamless Attendance Management", 
-    "Unite Faith with Technology"
-  ];
-
   const carouselSlides = [
     {
+      id: 1,
       title: "Christ Apostolic Church",
       subtitle: "Jehovah Is Great Ministries",
-      description: "Modern digital attendance system for seamless church service management",
-      cta: "Take Attendance Now"
+      description: "Experience seamless digital attendance management with cutting-edge technology designed for modern church services",
+      cta: "Take Attendance Now",
+      bgGradient: "bg-gradient-to-br from-church-primary/30 via-church-secondary/20 to-church-accent/10"
     },
     {
-      title: "Real-Time Attendance",
-      subtitle: "Track Every Service",
-      description: "Get instant insights and reports for all your church services and ministries",
-      cta: "View Dashboard"
+      id: 2,
+      title: "Real-Time Analytics",
+      subtitle: "Smart Attendance Tracking",
+      description: "Get instant insights, detailed reports, and comprehensive analytics for all your church services and ministries",
+      cta: "View Dashboard",
+      bgGradient: "bg-gradient-to-br from-church-secondary/30 via-church-accent/20 to-church-primary/10"
     },
     {
-      title: "Multiple Ministries",
-      subtitle: "One Platform",
-      description: "Manage attendance for Main Church, Teens, Children, and all special programs",
-      cta: "Register Today"
+      id: 3,
+      title: "United in Faith",
+      subtitle: "Connected Through Technology",
+      description: "Streamline attendance for Main Church, Youth Ministry, Children's Church, and all special programs in one platform",
+      cta: "Join Community",
+      bgGradient: "bg-gradient-to-br from-church-accent/30 via-church-primary/20 to-church-secondary/10"
     }
   ];
 
@@ -56,43 +55,30 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const slideInterval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % carouselSlides.length);
-    }, 5000);
-
-    return () => clearInterval(slideInterval);
-  }, []);
-
-  useEffect(() => {
-    const textInterval = setInterval(() => {
-      setCurrentTextIndex((prev) => (prev + 1) % heroTexts.length);
-    }, 3000);
-
-    return () => clearInterval(textInterval);
-  }, []);
-
   const quickActions = [
     {
-      title: "Enter Attendance",
-      description: "Record service attendance",
+      title: "Take Attendance",
+      description: "Record service attendance instantly",
       icon: Users,
       href: "/attendance",
-      primary: true
+      primary: true,
+      gradient: "from-church-primary to-church-secondary"
     },
     {
       title: "Register as Usher",
-      description: "Get your PIN and register",
+      description: "Get your secure PIN and start recording",
       icon: UserPlus,
       action: () => setShowRegistration(true),
-      primary: false
+      primary: false,
+      gradient: "from-church-secondary to-church-accent"
     },
     {
-      title: "View Reports",
-      description: "Leader dashboard and analytics",
+      title: "View Analytics",
+      description: "Access leader dashboard and reports",
       icon: BarChart3,
       href: "/dashboard",
-      primary: false
+      primary: false,
+      gradient: "from-church-accent to-church-primary"
     }
   ];
 
@@ -104,10 +90,7 @@ const Index = () => {
     'Dining with the King'
   ];
 
-  const roleOptions = [
-    'User',
-    'Leader'
-  ];
+  const roleOptions = ['User', 'Leader'];
 
   const handleRegistration = () => {
     if (!registrationData.name || !registrationData.pin || !registrationData.ministry || !registrationData.role) {
@@ -119,7 +102,6 @@ const Index = () => {
       return;
     }
 
-    // Here you would typically save to database
     toast({
       title: "Registration Successful!",
       description: `Welcome ${registrationData.name}! Your PIN is ${registrationData.pin}. Please remember it for attendance entry.`,
@@ -130,179 +112,89 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
-      {/* Main Background with Parallax */}
+    <div className="min-h-screen relative bg-church-bg-light">
+      {/* Enhanced Background with Parallax */}
       <div 
         className="fixed inset-0 z-0"
         style={{
           transform: `translateY(${scrollY * 0.3}px)`,
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-church-primary/20 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-black/70 to-church-primary/30 z-10" />
         <img 
           src={churchAttendanceHero}
           alt="Church Attendance"
-          className="w-full h-[120vh] object-cover opacity-90"
+          className="w-full h-[120vh] object-cover"
         />
       </div>
       
-      {/* Content overlay */}
       <div className="relative z-20">
         <Header />
 
-        {/* Hero Carousel Section */}
-        <section className="min-h-screen flex items-center justify-center text-center px-4 relative overflow-hidden">
-          {/* Animated background elements */}
-          <div className="absolute top-20 left-10 animate-float">
-            <Church className="h-8 w-8 text-white/30" />
-          </div>
-          <div className="absolute top-40 right-20 animate-float" style={{ animationDelay: '2s' }}>
-            <Star className="h-6 w-6 text-church-accent/50" />
-          </div>
-          <div className="absolute bottom-40 left-20 animate-pulse-slow">
-            <Heart className="h-10 w-10 text-church-secondary/40" />
-          </div>
+        {/* Modern Hero Carousel */}
+        <ModernCarousel 
+          slides={carouselSlides}
+          onCTAClick={(slideId) => {
+            if (slideId === 1) window.location.href = "/attendance";
+            if (slideId === 2) window.location.href = "/dashboard";
+            if (slideId === 3) setShowRegistration(true);
+          }}
+          onRegisterClick={() => setShowRegistration(true)}
+        />
 
-          <div className="max-w-6xl mx-auto">
-            {/* Carousel Container */}
-            <div className="relative">
-              {carouselSlides.map((slide, index) => (
-                <div
-                  key={index}
-                  className={`transition-all duration-1000 ${
-                    index === currentSlide 
-                      ? 'opacity-100 translate-x-0' 
-                      : 'opacity-0 absolute inset-0 translate-x-full'
-                  }`}
-                >
-                  {/* Church Icon */}
-                  <div className="mb-8 animate-scale-in">
-                    <div className="inline-flex p-6 bg-gradient-to-r from-church-primary/20 to-church-secondary/20 backdrop-blur-xl border border-white/30 rounded-full mb-8 shadow-2xl">
-                      <Church className="h-16 w-16 text-white animate-pulse-slow" />
-                    </div>
-                  </div>
-
-                  {/* Main Title with Flip Animation */}
-                  <div className="mb-4">
-                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-3 animate-fade-in-up">
-                      {slide.title}
-                    </h1>
-                    <div className="h-12 md:h-16 flex items-center justify-center">
-                      <span 
-                        key={currentTextIndex}
-                        className="block text-lg md:text-2xl lg:text-3xl bg-gradient-to-r from-church-accent via-church-secondary to-white bg-clip-text text-transparent animate-text-flip font-bold"
-                      >
-                        {heroTexts[currentTextIndex]}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Subtitle */}
-                  <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-church-secondary mb-4 animate-slide-up">
-                    {slide.subtitle}
-                  </h2>
-
-                  {/* Description */}
-                  <p className="text-sm md:text-base lg:text-lg text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in">
-                    {slide.description}
-                  </p>
-                  
-                  {/* Call to Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">
-                    <Button 
-                      size="default"
-                      className="bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90 text-white text-sm md:text-base px-6 py-3 rounded-2xl transition-all duration-300 hover:scale-105 shadow-xl border border-white/20 backdrop-blur-sm"
-                      onClick={() => window.location.href = "/attendance"}
-                    >
-                      <Play className="mr-2 h-4 w-4" />
-                      {slide.cta}
-                    </Button>
-                    <Button 
-                      size="default"
-                      variant="outline"
-                      className="bg-white/10 backdrop-blur-xl border border-white/50 hover:bg-white/20 text-white text-sm md:text-base px-6 py-3 rounded-2xl transition-all duration-300 hover:scale-105 shadow-xl"
-                      onClick={() => setShowRegistration(true)}
-                    >
-                      <UserPlus className="mr-2 h-4 w-4" />
-                      Register Now
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Carousel Indicators */}
-            <div className="flex justify-center mt-12 space-x-4">
-              {carouselSlides.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-4 h-4 rounded-full transition-all duration-300 ${
-                    index === currentSlide 
-                      ? 'bg-white scale-125' 
-                      : 'bg-white/40 hover:bg-white/60'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Main Content Sections with Different Backgrounds */}
-        
-        {/* Quick Actions Section */}
-        <section className="relative py-24 overflow-hidden">
-          {/* Background with parallax */}
+        {/* Enhanced Quick Actions Section */}
+        <section className="relative py-32 overflow-hidden">
           <div 
-            className="absolute inset-0 opacity-20"
+            className="absolute inset-0"
             style={{
-              transform: `translateY(${scrollY * 0.2}px)`,
+              transform: `translateY(${scrollY * 0.15}px)`,
             }}
           >
-            <div className="w-full h-full bg-gradient-to-br from-church-primary/30 to-church-secondary/30" />
+            <div className="w-full h-full bg-gradient-to-br from-church-primary/20 to-church-secondary/20" />
           </div>
           
-          <div className="relative z-10 bg-background/95 backdrop-blur-sm">
-            <div className="container mx-auto px-4 py-16">
-              <div className="max-w-6xl mx-auto">
-                <div className="text-center mb-12">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
-                    Quick Actions
+          <div className="relative z-10 bg-white/98 backdrop-blur-xl">
+            <div className="container mx-auto px-6 py-24">
+              <div className="max-w-7xl mx-auto">
+                <div className="text-center mb-20">
+                  <div className="inline-block p-4 bg-gradient-to-r from-church-primary/10 to-church-secondary/10 rounded-3xl mb-6">
+                    <Sparkles className="h-12 w-12 text-church-primary" />
+                  </div>
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-church-primary via-church-secondary to-church-accent bg-clip-text text-transparent">
+                    Get Started Today
                   </h2>
-                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-                    Get started with our powerful attendance management system
+                  <p className="text-xl md:text-2xl text-church-text-light/80 max-w-4xl mx-auto leading-relaxed">
+                    Transform your church experience with our powerful attendance management system
                   </p>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                   {quickActions.map((action, index) => (
                     <Card 
                       key={index}
-                      className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:rotate-1 animate-slide-up shadow-xl hover:shadow-2xl ${
-                        action.primary ? 'border-church-primary/50 bg-gradient-to-br from-church-primary/10 to-church-secondary/10' : 'hover:border-church-primary/30'
+                      className={`group cursor-pointer transition-all duration-700 hover:scale-110 hover:-rotate-2 animate-slide-up shadow-2xl hover:shadow-3xl border-0 overflow-hidden ${
+                        action.primary ? 'ring-2 ring-church-primary/30' : ''
                       }`}
-                      style={{ animationDelay: `${index * 200}ms` }}
+                      style={{ animationDelay: `${index * 300}ms` }}
                       onClick={() => action.href ? window.location.href = action.href : action.action?.()}
                     >
-                      <CardHeader className="text-center pb-4">
-                        <div className={`mx-auto w-20 h-20 rounded-3xl flex items-center justify-center mb-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 ${
-                          action.primary 
-                            ? 'bg-gradient-to-br from-church-primary to-church-secondary shadow-lg' 
-                            : 'bg-gradient-to-br from-muted to-muted/80'
-                        }`}>
-                          <action.icon className={`h-10 w-10 ${action.primary ? 'text-white' : 'text-muted-foreground'}`} />
+                      <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
+                      
+                      <CardHeader className="text-center pb-6 pt-12">
+                        <div className={`mx-auto w-28 h-28 rounded-3xl flex items-center justify-center mb-8 transition-all duration-500 group-hover:scale-125 group-hover:rotate-12 bg-gradient-to-br ${action.gradient} shadow-2xl`}>
+                          <action.icon className="h-14 w-14 text-white" />
                         </div>
-                        <CardTitle className={`text-xl mb-2 ${action.primary ? 'text-church-primary' : ''}`}>
+                        <CardTitle className="text-2xl mb-4 text-church-primary group-hover:text-church-secondary transition-colors duration-300">
                           {action.title}
                         </CardTitle>
-                        <CardDescription className="text-base">
+                        <CardDescription className="text-lg leading-relaxed">
                           {action.description}
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="pt-0 text-center">
-                        <div className="flex items-center justify-center text-church-primary group-hover:translate-x-2 transition-all duration-300">
-                          <span className="text-base font-semibold">Get Started</span>
-                          <ChevronRight className="ml-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
+                      <CardContent className="pt-0 pb-12 text-center">
+                        <div className="flex items-center justify-center text-church-primary group-hover:text-church-secondary group-hover:translate-x-4 transition-all duration-300">
+                          <span className="text-lg font-bold">Explore Now</span>
+                          <ChevronRight className="ml-3 h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
                         </div>
                       </CardContent>
                     </Card>
@@ -313,70 +205,85 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Features Section */}
-        <section className="relative py-24 overflow-hidden">
+        {/* Enhanced Features Grid */}
+        <section className="relative py-32 overflow-hidden">
           <div 
             className="absolute inset-0"
             style={{
               transform: `translateY(${scrollY * -0.1}px)`,
             }}
           >
-            <div className="w-full h-full bg-gradient-to-t from-church-accent/10 to-transparent" />
+            <div className="w-full h-full bg-gradient-to-t from-church-accent/15 to-transparent" />
           </div>
           
-          <div className="relative z-10 bg-card/90 backdrop-blur-sm">
-            <div className="container mx-auto px-4 py-16">
-              <div className="max-w-6xl mx-auto text-center">
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 animate-fade-in">
-                  Why Choose Our System?
-                </h2>
-                <p className="text-base md:text-lg text-muted-foreground mb-12 max-w-3xl mx-auto animate-slide-up">
-                  Experience the future of church attendance management with our innovative features
-                </p>
+          <div className="relative z-10 bg-gradient-to-br from-white/95 to-church-bg-light/95 backdrop-blur-xl">
+            <div className="container mx-auto px-6 py-24">
+              <div className="max-w-7xl mx-auto">
+                <div className="text-center mb-20">
+                  <div className="inline-block p-4 bg-gradient-to-r from-church-secondary/10 to-church-accent/10 rounded-3xl mb-6">
+                    <Award className="h-12 w-12 text-church-secondary" />
+                  </div>
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-church-primary">
+                    Why Choose Our Platform?
+                  </h2>
+                  <p className="text-xl md:text-2xl text-church-text-light/80 mb-16 max-w-4xl mx-auto leading-relaxed">
+                    Discover the advanced features that make church attendance management effortless
+                  </p>
+                </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                   {[
                     {
                       icon: Zap,
                       title: "Lightning Fast",
-                      description: "Quick and efficient attendance recording for all age groups"
+                      description: "Ultra-quick attendance recording with optimized performance for all devices",
+                      color: "from-yellow-400 to-orange-500"
                     },
                     {
                       icon: Shield,
-                      title: "Secure & Reliable",
-                      description: "PIN-based authentication ensures data security and accuracy"
+                      title: "Military-Grade Security", 
+                      description: "Advanced PIN-based authentication with encrypted data protection",
+                      color: "from-blue-400 to-purple-500"
                     },
                     {
                       icon: Globe,
-                      title: "Multi-Ministry Support",
-                      description: "Manage attendance for all church ministries in one platform"
+                      title: "Multi-Ministry Hub",
+                      description: "Comprehensive platform supporting all church ministries and programs",
+                      color: "from-green-400 to-blue-500"
                     },
                     {
-                      icon: BarChart3,
-                      title: "Real-time Analytics",
-                      description: "Get instant insights and detailed reports for better planning"
+                      icon: TrendingUp,
+                      title: "Advanced Analytics",
+                      description: "AI-powered insights with predictive attendance modeling",
+                      color: "from-purple-400 to-pink-500"
                     },
                     {
                       icon: Heart,
-                      title: "User-Friendly",
-                      description: "Designed for all ages, from teenagers to senior members"
+                      title: "User-Centric Design",
+                      description: "Intuitive interface designed for seamless user experience across all ages",
+                      color: "from-pink-400 to-red-500"
                     },
                     {
                       icon: Target,
-                      title: "Accurate Tracking",
-                      description: "Precise attendance tracking with detailed breakdowns"
+                      title: "Precision Tracking",
+                      description: "Accurate attendance monitoring with detailed demographic breakdowns",
+                      color: "from-indigo-400 to-purple-500"
                     }
                   ].map((feature, index) => (
                     <div 
                       key={index}
-                      className="group p-8 rounded-2xl bg-gradient-to-br from-background to-background/80 shadow-lg hover:shadow-xl transition-all duration-500 animate-scale-in border border-border hover:border-church-primary/30"
-                      style={{ animationDelay: `${index * 150}ms` }}
+                      className="group p-10 rounded-3xl bg-white shadow-2xl hover:shadow-3xl transition-all duration-700 animate-scale-in border border-church-primary/10 hover:border-church-primary/30 hover:scale-105"
+                      style={{ animationDelay: `${index * 200}ms` }}
                     >
-                      <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-church-primary to-church-secondary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <feature.icon className="h-8 w-8 text-white" />
+                      <div className={`w-20 h-20 mx-auto mb-8 rounded-3xl bg-gradient-to-br ${feature.color} flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500 shadow-xl`}>
+                        <feature.icon className="h-10 w-10 text-white" />
                       </div>
-                      <h3 className="text-lg font-semibold mb-3 text-church-primary">{feature.title}</h3>
-                      <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{feature.description}</p>
+                      <h3 className="text-2xl font-bold mb-4 text-church-primary group-hover:text-church-secondary transition-colors duration-300">
+                        {feature.title}
+                      </h3>
+                      <p className="text-lg text-church-text-light/80 leading-relaxed">
+                        {feature.description}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -385,12 +292,12 @@ const Index = () => {
           </div>
         </section>
 
-        {/* How It Works Section */}
-        <section className="relative py-24 overflow-hidden">
+        {/* Enhanced Ministry Showcase */}
+        <section className="relative py-32 overflow-hidden">
           <div 
-            className="absolute inset-0 opacity-30"
+            className="absolute inset-0 opacity-40"
             style={{
-              transform: `translateY(${scrollY * 0.15}px)`,
+              transform: `translateY(${scrollY * 0.2}px)`,
             }}
           >
             <img 
@@ -398,122 +305,83 @@ const Index = () => {
               alt="Background"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-church-primary/40 to-church-secondary/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-church-primary/60 to-church-secondary/60" />
           </div>
           
-          <div className="relative z-10 bg-background/95 backdrop-blur-sm">
-            <div className="container mx-auto px-4 py-16">
-              <div className="max-w-6xl mx-auto text-center">
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white animate-fade-in">
-                  How It Works
-                </h2>
-                <p className="text-base md:text-lg text-white/80 mb-12 max-w-3xl mx-auto animate-slide-up">
-                  Simple, secure, and efficient - get started in three easy steps
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                  {[
-                    {
-                      step: "01",
-                      icon: Shield,
-                      title: "Login with PIN",
-                      description: "Enter your name and secure PIN to access the system"
-                    },
-                    {
-                      step: "02", 
-                      icon: Clock,
-                      title: "Select Service",
-                      description: "Choose the service and ministry you're recording for"
-                    },
-                    {
-                      step: "03",
-                      icon: Users,
-                      title: "Record Attendance", 
-                      description: "Count and submit attendance with detailed breakdowns"
-                    }
-                  ].map((step, index) => (
-                    <div key={index} className="relative animate-slide-up" style={{ animationDelay: `${index * 200}ms` }}>
-                      <div className="text-center">
-                        <div className="relative mb-8">
-                          <div className="w-24 h-24 mx-auto bg-gradient-to-br from-white to-white/90 rounded-full flex items-center justify-center shadow-2xl">
-                            <step.icon className="h-12 w-12 text-church-primary" />
-                          </div>
-                          <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-church-accent to-church-secondary rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg">
-                            {step.step}
-                          </div>
-                        </div>
-                        <h3 className="text-lg font-semibold mb-3 text-white">{step.title}</h3>
-                        <p className="text-white/80 text-sm md:text-base leading-relaxed">{step.description}</p>
-                      </div>
-                      {index < 2 && (
-                        <div className="hidden md:block absolute top-12 left-full w-12 border-t-2 border-dashed border-white/40 transform translate-x-6"></div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Ministry Areas Section */}
-        <section className="relative py-24 overflow-hidden">
-          <div className="relative z-10 bg-card/95 backdrop-blur-sm">
-            <div className="container mx-auto px-4 py-16">
-              <div className="max-w-6xl mx-auto">
-                <div className="text-center mb-12">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
-                    Ministry Areas
+          <div className="relative z-10 bg-white/95 backdrop-blur-xl">
+            <div className="container mx-auto px-6 py-24">
+              <div className="max-w-7xl mx-auto">
+                <div className="text-center mb-20">
+                  <div className="inline-block p-4 bg-gradient-to-r from-church-accent/10 to-church-primary/10 rounded-3xl mb-6">
+                    <Church className="h-12 w-12 text-church-accent" />
+                  </div>
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
+                    Ministry Coverage
                   </h2>
-                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-                    Comprehensive attendance management across all church ministries
+                  <p className="text-xl md:text-2xl text-church-text-light/80 max-w-4xl mx-auto leading-relaxed">
+                    Comprehensive attendance management across all church ministries and programs
                   </p>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                   {[
                     { 
-                      name: "Main Church", 
-                      count: "4 sections",
+                      name: "Main Church Service", 
+                      count: "4 Seating Sections",
                       icon: Church,
-                      description: "Primary worship service with multiple seating areas"
+                      description: "Primary worship service with comprehensive multi-section attendance tracking",
+                      stats: "500+ Members"
                     },
                     { 
-                      name: "Teens Church", 
-                      count: "1 section + Teachers",
+                      name: "Youth Ministry", 
+                      count: "Teens + Leaders",
                       icon: Users,
-                      description: "Youth ministry with separate teacher tracking"
+                      description: "Dynamic youth programs with separate tracking for participants and mentors",
+                      stats: "150+ Teens"
                     },
                     { 
-                      name: "Infant Church", 
-                      count: "1 section + Teachers",
+                      name: "Children's Church", 
+                      count: "Kids + Teachers",
                       icon: Heart,
-                      description: "Children's ministry with dedicated teacher count"
+                      description: "Dedicated children's ministry with safety-focused attendance monitoring",
+                      stats: "200+ Children"
                     },
                     { 
-                      name: "Dining with the King", 
-                      count: "1 section",
+                      name: "Fellowship Programs", 
+                      count: "Special Events",
                       icon: Calendar,
-                      description: "Fellowship and community dining program"
+                      description: "Community dining and special event attendance management",
+                      stats: "300+ Participants"
                     }
                   ].map((ministry, index) => (
                     <Card 
                       key={index} 
-                      className="p-8 border-church-primary/20 hover:border-church-primary/40 transition-all duration-500 hover:scale-105 animate-slide-up shadow-lg hover:shadow-xl bg-gradient-to-br from-background to-background/80"
-                      style={{ animationDelay: `${index * 150}ms` }}
+                      className="group p-8 border-0 hover:scale-105 transition-all duration-700 animate-slide-up shadow-2xl hover:shadow-3xl bg-gradient-to-br from-white to-church-bg-light/50 overflow-hidden"
+                      style={{ animationDelay: `${index * 250}ms` }}
                     >
-                      <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-church-primary to-church-secondary rounded-xl flex items-center justify-center flex-shrink-0">
-                          <ministry.icon className="h-6 w-6 text-white" />
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-church-primary/10 to-church-secondary/10 rounded-full -translate-y-16 translate-x-16 group-hover:scale-150 transition-transform duration-700" />
+                      
+                      <div className="relative flex items-start space-x-6">
+                        <div className="w-16 h-16 bg-gradient-to-br from-church-primary to-church-secondary rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:rotate-12 transition-transform duration-500 shadow-xl">
+                          <ministry.icon className="h-8 w-8 text-white" />
                         </div>
                         <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-lg font-semibold text-church-primary">{ministry.name}</h3>
-                            <span className="text-xs font-medium text-church-secondary bg-church-secondary/10 px-2 py-1 rounded-full">
+                          <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-2xl font-bold text-church-primary group-hover:text-church-secondary transition-colors duration-300">
+                              {ministry.name}
+                            </h3>
+                            <span className="text-sm font-bold text-white bg-gradient-to-r from-church-secondary to-church-accent px-4 py-2 rounded-full shadow-lg">
                               {ministry.count}
                             </span>
                           </div>
-                          <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{ministry.description}</p>
+                          <p className="text-lg text-church-text-light/80 leading-relaxed mb-4">
+                            {ministry.description}
+                          </p>
+                          <div className="flex items-center text-church-primary font-semibold">
+                            <span className="text-sm bg-church-primary/10 px-3 py-1 rounded-full">
+                              {ministry.stats}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </Card>
@@ -524,61 +392,81 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="border-t bg-card/50 backdrop-blur-sm mt-16 animate-fade-in">
-          <div className="container mx-auto px-4 py-6 text-center">
-            <p className="text-muted-foreground">
-              © 2024 CACJIGM - Christ Apostolic Church Jehovah Is Great Ministries
-            </p>
+        {/* Enhanced Footer */}
+        <footer className="relative bg-gradient-to-br from-church-primary via-church-secondary to-church-accent text-white py-16">
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="relative z-10 container mx-auto px-6 text-center">
+            <div className="mb-8">
+              <div className="inline-flex items-center gap-4 mb-4">
+                <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-xl">
+                  <Church className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold">CACJIGM</h3>
+              </div>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
+                Christ Apostolic Church Jehovah Is Great Ministries - Leading the future of church attendance management
+              </p>
+            </div>
+            <div className="border-t border-white/20 pt-8">
+              <p className="text-white/70 text-lg">
+                © 2024 CACJIGM. All rights reserved. Built with ❤️ for the church community.
+              </p>
+            </div>
           </div>
         </footer>
       </div>
 
-      {/* Registration Modal */}
+      {/* Enhanced Registration Modal */}
       <Dialog open={showRegistration} onOpenChange={setShowRegistration}>
-        <DialogContent className="sm:max-w-md animate-scale-in">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <UserPlus className="h-5 w-5 text-church-primary" />
-              Register as Usher
+        <DialogContent className="sm:max-w-lg animate-scale-in bg-gradient-to-br from-white to-church-bg-light border-church-primary/20 shadow-2xl">
+          <DialogHeader className="pb-6">
+            <DialogTitle className="flex items-center gap-3 text-2xl">
+              <div className="p-2 bg-gradient-to-br from-church-primary to-church-secondary rounded-xl">
+                <UserPlus className="h-6 w-6 text-white" />
+              </div>
+              <span className="bg-gradient-to-r from-church-primary to-church-secondary bg-clip-text text-transparent">
+                Join Our Community
+              </span>
             </DialogTitle>
-            <DialogDescription>
-              Enter your details to register and get your unique PIN for attendance entry.
+            <DialogDescription className="text-lg text-church-text-light/80">
+              Register as an usher to get your unique PIN and start managing attendance with our advanced system.
             </DialogDescription>
           </DialogHeader>
           
-          <div className="space-y-4 py-4">
+          <div className="space-y-6 py-6">
             <div>
-              <Label htmlFor="reg-name">Full Name</Label>
+              <Label htmlFor="reg-name" className="text-base font-semibold text-church-primary">Full Name</Label>
               <Input
                 id="reg-name"
-                placeholder="Enter your full name"
+                placeholder="Enter your complete name"
                 value={registrationData.name}
                 onChange={(e) => setRegistrationData(prev => ({ ...prev, name: e.target.value }))}
+                className="mt-2 text-base py-3 border-church-primary/30 focus:border-church-primary"
               />
             </div>
             
             <div>
-              <Label htmlFor="reg-pin">Create PIN (4-6 digits)</Label>
+              <Label htmlFor="reg-pin" className="text-base font-semibold text-church-primary">Create PIN (4-6 digits)</Label>
               <Input
                 id="reg-pin"
                 type="password"
-                placeholder="Enter a memorable PIN"
+                placeholder="Create a memorable PIN"
                 maxLength={6}
                 value={registrationData.pin}
                 onChange={(e) => setRegistrationData(prev => ({ ...prev, pin: e.target.value }))}
+                className="mt-2 text-base py-3 border-church-primary/30 focus:border-church-primary"
               />
             </div>
             
             <div>
-              <Label htmlFor="reg-ministry">Ministry Area</Label>
+              <Label htmlFor="reg-ministry" className="text-base font-semibold text-church-primary">Ministry Area</Label>
               <Select value={registrationData.ministry} onValueChange={(value) => setRegistrationData(prev => ({ ...prev, ministry: value }))}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select your ministry" />
+                <SelectTrigger className="mt-2 text-base py-3 border-church-primary/30">
+                  <SelectValue placeholder="Select your ministry area" />
                 </SelectTrigger>
                 <SelectContent>
                   {ministryOptions.map((ministry) => (
-                    <SelectItem key={ministry} value={ministry}>
+                    <SelectItem key={ministry} value={ministry} className="text-base">
                       {ministry}
                     </SelectItem>
                   ))}
@@ -587,14 +475,14 @@ const Index = () => {
             </div>
             
             <div>
-              <Label htmlFor="reg-role">Role</Label>
+              <Label htmlFor="reg-role" className="text-base font-semibold text-church-primary">Role</Label>
               <Select value={registrationData.role} onValueChange={(value) => setRegistrationData(prev => ({ ...prev, role: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="mt-2 text-base py-3 border-church-primary/30">
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
                 <SelectContent>
                   {roleOptions.map((role) => (
-                    <SelectItem key={role} value={role}>
+                    <SelectItem key={role} value={role} className="text-base">
                       {role}
                     </SelectItem>
                   ))}
@@ -603,19 +491,19 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="flex gap-3">
+          <div className="flex gap-4 pt-6">
             <Button 
               variant="outline" 
               onClick={() => setShowRegistration(false)}
-              className="flex-1"
+              className="flex-1 text-base py-3 border-church-primary/30 hover:bg-church-primary/10"
             >
               Cancel
             </Button>
             <Button 
               onClick={handleRegistration}
-              className="flex-1 bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90"
+              className="flex-1 text-base py-3 bg-gradient-to-r from-church-primary to-church-secondary hover:from-church-primary/90 hover:to-church-secondary/90 shadow-xl"
             >
-              Register
+              Complete Registration
             </Button>
           </div>
         </DialogContent>
