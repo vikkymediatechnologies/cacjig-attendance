@@ -113,14 +113,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative bg-church-bg-light">
-        {/* Enhanced Background */}
+      {/* Enhanced Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-church-primary/5 via-white to-church-secondary/5" />
         <img 
           src={churchAttendanceHero}
           alt="Church Attendance"
-          className="w-full h-full object-cover opacity-10"
+          className="w-full h-full object-cover opacity-30"
         />
+        <div className="absolute inset-0 bg-gradient-to-br from-church-primary/20 via-white/60 to-church-secondary/20" />
       </div>
       
       <div className="relative z-20">

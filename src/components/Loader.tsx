@@ -4,7 +4,7 @@ import { Church } from "lucide-react";
 const Loader = ({ onComplete }: { onComplete: () => void }) => {
   const [stage, setStage] = useState(0);
   
-  const churchText = "CACJIGM";
+  const churchText = "CACJIM";
   const subtitleText = "Attendance System";
 
   useEffect(() => {
