@@ -118,9 +118,9 @@ const Index = () => {
         <img 
           src={churchAttendanceHero}
           alt="Church Attendance"
-          className="w-full h-full object-cover opacity-50"
+          className="w-full h-full object-cover opacity-80"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-church-primary/10 via-church-bg-light/40 to-church-secondary/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-church-primary/5 via-transparent to-church-secondary/5" />
       </div>
       
       <div className="relative z-20">

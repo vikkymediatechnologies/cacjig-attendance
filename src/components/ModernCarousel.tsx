@@ -93,7 +93,7 @@ const ModernCarousel = ({
               className={`absolute inset-0 flex items-center justify-center transition-all duration-[800ms] ease-in-out ${transformClass}`}
             >
               {/* Dynamic Background */}
-              <div className={`absolute inset-0 ${slide.bgGradient} opacity-20`} />
+              <div className={`absolute inset-0 ${slide.bgGradient} opacity-10`} />
               
               {/* Animated Background Elements */}
               <div className="absolute top-20 left-10 animate-float opacity-30">
