@@ -112,15 +112,15 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen relative bg-church-bg-light">
+    <div className="min-h-screen relative bg-church-bg-dark">
       {/* Enhanced Background */}
       <div className="fixed inset-0 z-0">
         <img 
           src={churchAttendanceHero}
           alt="Church Attendance"
-          className="w-full h-full object-cover opacity-80"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-church-primary/5 via-transparent to-church-secondary/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-church-bg-dark/60 via-church-bg-dark/40 to-church-bg-dark/80" />
       </div>
       
       <div className="relative z-20">
@@ -138,17 +138,17 @@ const Index = () => {
         />
 
         {/* Enhanced Quick Actions Section */}
-        <section className="relative py-16 sm:py-24 overflow-hidden bg-white">
+        <section className="relative py-16 sm:py-24 overflow-hidden bg-church-bg-glass/20 backdrop-blur-xl">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12 sm:mb-16">
                 <div className="inline-block p-3 bg-gradient-to-r from-church-primary/10 to-church-secondary/10 rounded-2xl mb-4">
                   <Sparkles className="h-8 w-8 text-church-primary" />
                 </div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-church-primary">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-church-text-dark">
                   Get Started Today
                 </h2>
-                <p className="text-sm sm:text-base text-church-text-light/80 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-sm sm:text-base text-church-text-dark/80 max-w-2xl mx-auto leading-relaxed">
                   Transform your church experience with our powerful attendance management system
                 </p>
               </div>
@@ -157,26 +157,26 @@ const Index = () => {
                 {quickActions.map((action, index) => (
                   <Card 
                     key={index}
-                    className={`group cursor-pointer transition-all duration-500 hover:scale-105 shadow-lg hover:shadow-xl border-0 overflow-hidden ${
-                      action.primary ? 'ring-2 ring-church-primary/20' : ''
+                    className={`group cursor-pointer transition-all duration-500 hover:scale-105 shadow-lg hover:shadow-xl border border-white/10 overflow-hidden bg-white/5 backdrop-blur-sm ${
+                      action.primary ? 'ring-2 ring-church-primary/40' : ''
                     }`}
                     onClick={() => action.href ? window.location.href = action.href : action.action?.()}
                   >
-                    <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-300`} />
                     
                     <CardHeader className="text-center pb-4 pt-8">
                       <div className={`mx-auto w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 bg-gradient-to-br ${action.gradient} shadow-lg`}>
                         <action.icon className="h-8 w-8 text-white" />
                       </div>
-                      <CardTitle className="text-lg mb-2 text-church-primary group-hover:text-church-secondary transition-colors duration-300">
+                      <CardTitle className="text-lg mb-2 text-church-text-dark group-hover:text-church-secondary transition-colors duration-300">
                         {action.title}
                       </CardTitle>
-                      <CardDescription className="text-sm leading-relaxed">
+                      <CardDescription className="text-sm leading-relaxed text-church-text-dark/70">
                         {action.description}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-0 pb-8 text-center">
-                      <div className="flex items-center justify-center text-church-primary group-hover:text-church-secondary group-hover:translate-x-1 transition-all duration-300">
+                      <div className="flex items-center justify-center text-church-text-dark group-hover:text-church-secondary group-hover:translate-x-1 transition-all duration-300">
                         <span className="text-sm font-semibold">Explore Now</span>
                         <ChevronRight className="ml-2 h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
                       </div>
@@ -189,17 +189,17 @@ const Index = () => {
         </section>
 
         {/* Enhanced Features Grid */}
-        <section className="relative py-16 sm:py-24 overflow-hidden bg-church-bg-light/50">
+        <section className="relative py-16 sm:py-24 overflow-hidden bg-church-bg-glass/10 backdrop-blur-sm">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12 sm:mb-16">
                 <div className="inline-block p-3 bg-gradient-to-r from-church-secondary/10 to-church-accent/10 rounded-2xl mb-4">
                   <Award className="h-8 w-8 text-church-secondary" />
                 </div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-church-primary">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-church-text-dark">
                   Why Choose Our Platform?
                 </h2>
-                <p className="text-sm sm:text-base text-church-text-light/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-sm sm:text-base text-church-text-dark/80 mb-8 max-w-2xl mx-auto leading-relaxed">
                   Discover the advanced features that make church attendance management effortless
                 </p>
               </div>
@@ -245,15 +245,15 @@ const Index = () => {
                 ].map((feature, index) => (
                   <div 
                     key={index}
-                    className="group p-6 sm:p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-500 border border-church-primary/10 hover:border-church-primary/20 hover:scale-105"
+                    className="group p-6 sm:p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg hover:shadow-xl transition-all duration-500 hover:border-white/20 hover:scale-105"
                   >
                     <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md`}>
                       <feature.icon className="h-7 w-7 text-white" />
                     </div>
-                    <h3 className="text-base font-bold mb-2 text-church-primary group-hover:text-church-secondary transition-colors duration-300">
+                    <h3 className="text-base font-bold mb-2 text-church-text-dark group-hover:text-church-secondary transition-colors duration-300">
                       {feature.title}
                     </h3>
-                    <p className="text-sm text-church-text-light/80 leading-relaxed">
+                    <p className="text-sm text-church-text-dark/80 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
@@ -264,17 +264,17 @@ const Index = () => {
         </section>
 
         {/* Enhanced Ministry Showcase */}
-        <section className="relative py-16 sm:py-24 overflow-hidden bg-white">
+        <section className="relative py-16 sm:py-24 overflow-hidden bg-church-bg-glass/20 backdrop-blur-xl">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12 sm:mb-16">
                 <div className="inline-block p-3 bg-gradient-to-r from-church-accent/10 to-church-primary/10 rounded-2xl mb-4">
                   <Church className="h-8 w-8 text-church-accent" />
                 </div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-church-primary">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 text-church-text-dark">
                   Ministry Coverage
                 </h2>
-                <p className="text-sm sm:text-base text-church-text-light/80 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-sm sm:text-base text-church-text-dark/80 max-w-2xl mx-auto leading-relaxed">
                   Comprehensive attendance management across all church ministries and programs
                 </p>
               </div>
@@ -312,7 +312,7 @@ const Index = () => {
                 ].map((ministry, index) => (
                   <Card 
                     key={index} 
-                    className="group p-6 border-0 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-church-bg-light/30 overflow-hidden"
+                    className="group p-6 border border-white/10 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-xl bg-white/5 backdrop-blur-sm overflow-hidden"
                   >
                     <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-church-primary/5 to-church-secondary/5 rounded-full -translate-y-12 translate-x-12 group-hover:scale-125 transition-transform duration-500" />
                     
@@ -322,18 +322,18 @@ const Index = () => {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-3">
-                          <h3 className="text-base font-bold text-church-primary group-hover:text-church-secondary transition-colors duration-300">
+                          <h3 className="text-base font-bold text-church-text-dark group-hover:text-church-secondary transition-colors duration-300">
                             {ministry.name}
                           </h3>
                           <span className="text-xs font-bold text-white bg-gradient-to-r from-church-secondary to-church-accent px-3 py-1 rounded-full shadow-sm">
                             {ministry.count}
                           </span>
                         </div>
-                        <p className="text-sm text-church-text-light/80 leading-relaxed mb-3">
+                        <p className="text-sm text-church-text-dark/80 leading-relaxed mb-3">
                           {ministry.description}
                         </p>
-                        <div className="flex items-center text-church-primary font-semibold">
-                          <span className="text-xs bg-church-primary/10 px-2 py-1 rounded-full">
+                        <div className="flex items-center text-church-text-dark font-semibold">
+                          <span className="text-xs bg-church-primary/20 text-church-text-dark px-2 py-1 rounded-full">
                             {ministry.stats}
                           </span>
                         </div>

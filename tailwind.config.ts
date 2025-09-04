@@ -56,7 +56,10 @@ export default {
 					secondary: 'hsl(var(--church-secondary))',
 					accent: 'hsl(var(--church-accent))',
 					'bg-light': 'hsl(var(--church-bg-light))',
-					'text-light': 'hsl(var(--church-text-light))'
+					'bg-dark': 'hsl(var(--church-bg-dark))',
+					'bg-glass': 'hsl(var(--church-bg-glass))',
+					'text-light': 'hsl(var(--church-text-light))',
+					'text-dark': 'hsl(var(--church-text-dark))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
